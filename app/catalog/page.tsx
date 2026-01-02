@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useGetProductsQuery } from '../store/api/productsApi'
 import { useGetSectionsQuery } from '../store/api/sectionsApi'
@@ -10,7 +10,7 @@ import ProductDrawer from '../components/ProductDrawer/ProductDrawer'
 import Loader from '../components/Loader/Loader'
 import { Product } from '../store/api/productsApi'
 
-export default function Catalog() {
+function CatalogContent() {
 	const searchParams = useSearchParams()
 	const sectionIdParam = searchParams.get('section_id')
 	const categoryIdParam = searchParams.get('category_id')
@@ -118,5 +118,13 @@ export default function Catalog() {
 				onClose={handleCloseDrawer}
 			/>
 		</div>
+	)
+}
+
+export default function Catalog() {
+	return (
+		<Suspense fallback={<Loader />}>
+			<CatalogContent />
+		</Suspense>
 	)
 }

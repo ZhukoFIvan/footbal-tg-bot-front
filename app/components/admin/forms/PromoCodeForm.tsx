@@ -30,15 +30,13 @@ const promoCodeSchema = z.object({
 		.max(50, 'Максимум 50 символов')
 		.toUpperCase(),
 	discount_type: z.enum(['percent', 'fixed']),
-	discount_value: z.coerce
-		.number()
-		.positive('Должно быть положительным числом'),
-	min_order_amount: z.coerce.number().nullable().optional(),
-	max_discount: z.coerce.number().nullable().optional(),
-	usage_limit: z.coerce.number().int().nullable().optional(),
+	discount_value: z.number().positive('Должно быть положительным числом'),
+	min_order_amount: z.number().positive().nullable().optional(),
+	max_discount: z.number().positive().nullable().optional(),
+	usage_limit: z.number().int().positive().nullable().optional(),
 	valid_from: z.string().nullable().optional(),
 	valid_until: z.string().nullable().optional(),
-	is_active: z.boolean().default(true),
+	is_active: z.boolean(),
 })
 
 type PromoCodeFormValues = z.infer<typeof promoCodeSchema>
@@ -60,9 +58,9 @@ export function PromoCodeForm({
 			code: initialData?.code || '',
 			discount_type: initialData?.discount_type || 'percent',
 			discount_value: initialData?.discount_value || 0,
-			min_order_amount: initialData?.min_order_amount || null,
-			max_discount: initialData?.max_discount || null,
-			usage_limit: initialData?.usage_limit || null,
+			min_order_amount: initialData?.min_order_amount ?? null,
+			max_discount: initialData?.max_discount ?? null,
+			usage_limit: initialData?.usage_limit ?? null,
 			valid_from: initialData?.valid_from
 				? new Date(initialData.valid_from).toISOString().slice(0, 16)
 				: null,
@@ -108,9 +106,7 @@ export function PromoCodeForm({
 									{...field}
 									placeholder='SUMMER2025'
 									className='bg-background border-white/10 text-foreground'
-									onChange={(e) =>
-										field.onChange(e.target.value.toUpperCase())
-									}
+									onChange={(e) => field.onChange(e.target.value.toUpperCase())}
 								/>
 							</FormControl>
 							<FormMessage />
@@ -158,6 +154,9 @@ export function PromoCodeForm({
 									max={discountType === 'percent' ? '100' : undefined}
 									placeholder={discountType === 'percent' ? '20' : '500'}
 									className='bg-background border-white/10 text-foreground'
+									onChange={(e) =>
+										field.onChange(parseFloat(e.target.value) || 0)
+									}
 								/>
 							</FormControl>
 							<FormMessage />
@@ -183,6 +182,13 @@ export function PromoCodeForm({
 										min='0'
 										placeholder='1000'
 										className='bg-background border-white/10 text-foreground'
+										onChange={(e) =>
+											field.onChange(
+												e.target.value === ''
+													? null
+													: parseFloat(e.target.value)
+											)
+										}
 									/>
 								</FormControl>
 								<FormMessage />
@@ -208,6 +214,11 @@ export function PromoCodeForm({
 									min='0'
 									placeholder='2000'
 									className='bg-background border-white/10 text-foreground'
+									onChange={(e) =>
+										field.onChange(
+											e.target.value === '' ? null : parseFloat(e.target.value)
+										)
+									}
 								/>
 							</FormControl>
 							<FormMessage />
@@ -231,6 +242,13 @@ export function PromoCodeForm({
 									min='1'
 									placeholder='100'
 									className='bg-background border-white/10 text-foreground'
+									onChange={(e) =>
+										field.onChange(
+											e.target.value === ''
+												? null
+												: parseInt(e.target.value, 10)
+										)
+									}
 								/>
 							</FormControl>
 							<FormMessage />
@@ -292,7 +310,10 @@ export function PromoCodeForm({
 								</p>
 							</div>
 							<FormControl>
-								<Switch checked={field.value} onCheckedChange={field.onChange} />
+								<Switch
+									checked={field.value}
+									onCheckedChange={field.onChange}
+								/>
 							</FormControl>
 						</FormItem>
 					)}
@@ -315,4 +336,3 @@ export function PromoCodeForm({
 		</Form>
 	)
 }
-

@@ -24,8 +24,11 @@ export default function AdminBonusPage() {
 	const [activeTab, setActiveTab] = useState<'users' | 'transactions'>('users')
 	const [search, setSearch] = useState('')
 
-	const { data: users, isLoading: usersLoading } = useGetAdminBonusUsersQuery({})
-	const { data: transactions, isLoading: transactionsLoading } = useGetAdminBonusTransactionsQuery({})
+	const { data: users, isLoading: usersLoading } = useGetAdminBonusUsersQuery(
+		{}
+	)
+	const { data: transactions, isLoading: transactionsLoading } =
+		useGetAdminBonusTransactionsQuery({})
 
 	const [addBonus] = useAddBonusMutation()
 	const [subtractBonus] = useSubtractBonusMutation()
@@ -43,20 +46,30 @@ export default function AdminBonusPage() {
 		}).format(amount)
 	}
 
-	const handleOpenModal = (userId: number, type: 'add' | 'subtract' | 'set') => {
+	const handleOpenModal = (
+		userId: number,
+		type: 'add' | 'subtract' | 'set'
+	) => {
 		setSelectedUserId(userId)
 		setModalType(type)
 		setModalOpen(true)
 	}
 
-	const handleSubmit = async (data: BonusAddInput | BonusSubtractInput | BonusSetBalanceInput) => {
+	const handleSubmit = async (
+		data: BonusAddInput | BonusSubtractInput | BonusSetBalanceInput
+	) => {
 		try {
 			if (modalType === 'add') {
 				await addBonus(data as BonusAddInput).unwrap()
 			} else if (modalType === 'subtract') {
 				await subtractBonus(data as BonusSubtractInput).unwrap()
 			} else {
-				await setBalance(data as BonusSetBalanceInput).unwrap()
+				const setBalanceData = data as BonusSetBalanceInput
+				await setBalance({
+					user_id: setBalanceData.user_id,
+					balance: setBalanceData.new_balance,
+					description: setBalanceData.description as string | undefined,
+				}).unwrap()
 			}
 
 			setModalOpen(false)
@@ -68,9 +81,9 @@ export default function AdminBonusPage() {
 
 	const filteredUsers = users?.filter(
 		(user) =>
-		user.telegram_id.toString().includes(search) ||
-		user.first_name?.toLowerCase().includes(search.toLowerCase()) ||
-		user.username?.toLowerCase().includes(search.toLowerCase())
+			user.telegram_id.toString().includes(search) ||
+			user.first_name?.toLowerCase().includes(search.toLowerCase()) ||
+			user.username?.toLowerCase().includes(search.toLowerCase())
 	)
 
 	return (
@@ -80,7 +93,11 @@ export default function AdminBonusPage() {
 				<div className='container mx-auto px-4 py-4'>
 					<div className='flex items-center justify-between mb-4'>
 						<div className='flex items-center gap-3'>
-							<Button onClick={() => router.push('/admin')} variant='ghost' size='icon'>
+							<Button
+								onClick={() => router.push('/admin')}
+								variant='ghost'
+								size='icon'
+							>
 								<ArrowLeft className='w-5 h-5' />
 							</Button>
 							<h1 className='text-2xl font-bold text-foreground'>Бонусы</h1>
@@ -92,7 +109,9 @@ export default function AdminBonusPage() {
 						<button
 							onClick={() => setActiveTab('users')}
 							className={`flex-1 px-4 py-2 rounded-xl font-medium transition-colors ${
-								activeTab === 'users' ? 'bg-primary text-white' : 'bg-element-bg text-foreground/50'
+								activeTab === 'users'
+									? 'bg-primary text-white'
+									: 'bg-element-bg text-foreground/50'
 							}`}
 						>
 							Пользователи
@@ -100,7 +119,9 @@ export default function AdminBonusPage() {
 						<button
 							onClick={() => setActiveTab('transactions')}
 							className={`flex-1 px-4 py-2 rounded-xl font-medium transition-colors ${
-								activeTab === 'transactions' ? 'bg-primary text-white' : 'bg-element-bg text-foreground/50'
+								activeTab === 'transactions'
+									? 'bg-primary text-white'
+									: 'bg-element-bg text-foreground/50'
 							}`}
 						>
 							Транзакции
@@ -130,17 +151,28 @@ export default function AdminBonusPage() {
 						) : filteredUsers && filteredUsers.length > 0 ? (
 							<div className='space-y-3'>
 								{filteredUsers.map((user) => (
-									<div key={user.user_id} className='bg-element-bg rounded-2xl p-4'>
+									<div
+										key={user.user_id}
+										className='bg-element-bg rounded-2xl p-4'
+									>
 										<div className='flex items-start justify-between mb-3'>
 											<div className='flex-1'>
 												<h3 className='text-foreground font-medium'>
 													{user.first_name || `User ${user.telegram_id}`}
 												</h3>
-												{user.username && <p className='text-sm text-foreground/50'>@{user.username}</p>}
-												<p className='text-xs text-foreground/40'>TG ID: {user.telegram_id}</p>
+												{user.username && (
+													<p className='text-sm text-foreground/50'>
+														@{user.username}
+													</p>
+												)}
+												<p className='text-xs text-foreground/40'>
+													TG ID: {user.telegram_id}
+												</p>
 											</div>
 											<div className='text-right'>
-												<p className='text-2xl font-bold text-primary'>{formatCurrency(user.bonus_balance)}</p>
+												<p className='text-2xl font-bold text-primary'>
+													{formatCurrency(user.bonus_balance)}
+												</p>
 											</div>
 										</div>
 
@@ -162,7 +194,9 @@ export default function AdminBonusPage() {
 												Начислить
 											</Button>
 											<Button
-												onClick={() => handleOpenModal(user.user_id, 'subtract')}
+												onClick={() =>
+													handleOpenModal(user.user_id, 'subtract')
+												}
 												variant='outline'
 												size='sm'
 												className='flex-1'
@@ -202,19 +236,33 @@ export default function AdminBonusPage() {
 												<h3 className='text-foreground font-medium'>
 													{tx.first_name || `User ${tx.telegram_id}`}
 												</h3>
-												{tx.username && <p className='text-xs text-foreground/50'>@{tx.username}</p>}
+												{tx.username && (
+													<p className='text-xs text-foreground/50'>
+														@{tx.username}
+													</p>
+												)}
 											</div>
 											<div className='text-right'>
-												<p className={`text-xl font-bold ${tx.amount > 0 ? 'text-primary' : 'text-destructive'}`}>
+												<p
+													className={`text-xl font-bold ${
+														tx.amount > 0 ? 'text-primary' : 'text-destructive'
+													}`}
+												>
 													{tx.amount > 0 ? '+' : ''}
 													{formatCurrency(tx.amount)}
 												</p>
 											</div>
 										</div>
 										<div className='space-y-1'>
-											<p className='text-sm text-foreground/70'>{tx.description}</p>
-											<p className='text-xs text-foreground/40'>{new Date(tx.created_at).toLocaleString('ru-RU')}</p>
-											<p className='text-xs text-foreground/40'>Тип: {tx.type}</p>
+											<p className='text-sm text-foreground/70'>
+												{tx.description}
+											</p>
+											<p className='text-xs text-foreground/40'>
+												{new Date(tx.created_at).toLocaleString('ru-RU')}
+											</p>
+											<p className='text-xs text-foreground/40'>
+												Тип: {tx.type}
+											</p>
 										</div>
 									</div>
 								))}
@@ -245,4 +293,3 @@ export default function AdminBonusPage() {
 		</div>
 	)
 }
-

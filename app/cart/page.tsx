@@ -109,7 +109,14 @@ export default function CartPage() {
 
 		try {
 			const result = await applyPromo({ code: promoCode.trim() }).unwrap()
-			setAppliedPromo(result)
+			setAppliedPromo({
+				code: promoCode.trim(),
+				discount: result.discount,
+				discount_type: result.discount_type as 'percent' | 'fixed',
+				discount_value: result.discount_value,
+				cart_total: result.cart_total,
+				new_total: result.new_total as number,
+			})
 			setPromoError('')
 		} catch (error: unknown) {
 			setAppliedPromo(null)

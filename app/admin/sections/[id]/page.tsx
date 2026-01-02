@@ -84,13 +84,12 @@ export default function EditSectionPage({ params }: { params: Promise<{ id: stri
 					defaultValues={{
 						name: section.name,
 						route: section.route,
-						rest_time: section.rest_time,
 						sort_order: section.sort_order,
 						is_active: section.is_active,
 					}}
 					onSubmit={handleSubmit}
 					isSubmitting={updating || uploading}
-					existingImage={getImageUrl(section.image_url)}
+					existingImage={getImageUrl(section.image)}
 				/>
 			</div>
 		</div>

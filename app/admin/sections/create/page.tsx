@@ -5,14 +5,14 @@ import { useCreateSectionMutation, useUploadSectionImageMutation } from '@/app/s
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import { SectionForm } from '@/app/components/admin/forms/SectionForm'
-import { SectionCreateInput } from '@/app/components/admin/forms/schemas/validationSchemas'
+import { SectionCreateInput, SectionUpdateInput } from '@/app/components/admin/forms/schemas/validationSchemas'
 
 export default function CreateSectionPage() {
 	const router = useRouter()
 	const [createSection, { isLoading: creating }] = useCreateSectionMutation()
 	const [uploadImage, { isLoading: uploading }] = useUploadSectionImageMutation()
 
-	const handleSubmit = async (data: SectionCreateInput, image?: File) => {
+	const handleSubmit = async (data: SectionCreateInput | SectionUpdateInput, image?: File) => {
 		try {
 			// 1. Создаем секцию
 			const section = await createSection(data).unwrap()

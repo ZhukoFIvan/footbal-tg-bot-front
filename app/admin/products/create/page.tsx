@@ -12,7 +12,10 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import Loader from '@/app/components/Loader/Loader'
 import { ProductForm } from '@/app/components/admin/forms/ProductForm'
-import { ProductCreateInput } from '@/app/components/admin/forms/schemas/validationSchemas'
+import {
+	ProductCreateInput,
+	ProductUpdateInput,
+} from '@/app/components/admin/forms/schemas/validationSchemas'
 
 export default function CreateProductPage() {
 	const router = useRouter()
@@ -27,7 +30,10 @@ export default function CreateProductPage() {
 	const [uploadImages, { isLoading: uploading }] =
 		useUploadProductImagesMutation()
 
-	const handleSubmit = async (data: ProductCreateInput, images?: File[]) => {
+	const handleSubmit = async (
+		data: ProductCreateInput | ProductUpdateInput,
+		images?: File[]
+	) => {
 		try {
 			// 1. Создаем товар
 			const product = await createProduct(data).unwrap()

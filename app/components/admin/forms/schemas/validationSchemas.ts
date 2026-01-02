@@ -87,6 +87,7 @@ export const categoryCreateSchema = z.object({
 		.int('Порядок сортировки должен быть целым числом')
 		.optional()
 		.default(0),
+	show_on_main: z.boolean().optional().default(false),
 	is_active: z.boolean().optional().default(true),
 })
 
@@ -114,6 +115,7 @@ export const categoryUpdateSchema = z.object({
 		.number()
 		.int('Порядок сортировки должен быть целым числом')
 		.optional(),
+	show_on_main: z.boolean().optional(),
 	is_active: z.boolean().optional(),
 })
 

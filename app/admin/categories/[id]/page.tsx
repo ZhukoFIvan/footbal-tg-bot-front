@@ -128,8 +128,8 @@ export default function EditCategoryPage({
 					}}
 					onSubmit={handleSubmit}
 					isSubmitting={updating}
-					existingMainImage={getImageUrl(category.main_image_url)}
-					existingAdditionalImage={getImageUrl(category.additional_image_url)}
+					existingMainImage={getImageUrl(category.main_image)}
+					existingAdditionalImage={getImageUrl(category.additional_image)}
 				/>
 			</div>
 		</div>

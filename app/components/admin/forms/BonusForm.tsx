@@ -95,7 +95,7 @@ export function BonusForm({
 				{/* Amount / New Balance */}
 				<FormInput
 					control={form.control}
-					name={getAmountFieldName() as any}
+					name={getAmountFieldName() as keyof BonusFormData}
 					label={getAmountLabel()}
 					required
 					type='number'

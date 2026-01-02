@@ -28,6 +28,9 @@ export const baseApi = createApi({
 		'SiteSettings',
 		'Reviews',
 		'PromoCodes',
+		'AdminBanners',
+		'AdminBonus',
+		'AdminStats',
 	],
 	// Отключаем кеширование глобально - всегда будет свежий запрос
 	keepUnusedDataFor: 0,

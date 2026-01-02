@@ -68,7 +68,7 @@ export function ImageUpload({
 				const existingFiles = Array.isArray(value) ? value : value ? [value] : []
 				const combinedFiles = [...existingFiles, ...newFiles].slice(0, maxFiles)
 				setLocalPreviews([...localPreviews, ...previews].slice(0, maxFiles))
-				onChange(combinedFiles as any)
+				onChange(combinedFiles as File[])
 			} else {
 				setLocalPreviews(previews)
 				onChange(newFiles[0])
@@ -81,7 +81,7 @@ export function ImageUpload({
 			const newFiles = value.filter((_, i) => i !== index)
 			const newPreviews = localPreviews.filter((_, i) => i !== index)
 			setLocalPreviews(newPreviews)
-			onChange(newFiles.length > 0 ? newFiles : null)
+			onChange(newFiles.length > 0 ? newFiles as File[] : null)
 		} else {
 			setLocalPreviews([])
 			onChange(null)

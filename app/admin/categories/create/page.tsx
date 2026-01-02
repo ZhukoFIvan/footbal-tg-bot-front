@@ -5,14 +5,17 @@ import { useCreateCategoryMutation } from '@/app/store/api/adminApi'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import { CategoryForm } from '@/app/components/admin/forms/CategoryForm'
-import { CategoryCreateInput } from '@/app/components/admin/forms/schemas/validationSchemas'
+import {
+	CategoryCreateInput,
+	CategoryUpdateInput,
+} from '@/app/components/admin/forms/schemas/validationSchemas'
 
 export default function CreateCategoryPage() {
 	const router = useRouter()
 	const [createCategory, { isLoading: creating }] = useCreateCategoryMutation()
 
 	const handleSubmit = async (
-		data: CategoryCreateInput,
+		data: CategoryCreateInput | CategoryUpdateInput,
 		images: { main?: File; additional?: File }
 	) => {
 		try {
