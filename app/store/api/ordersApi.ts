@@ -1,14 +1,14 @@
 import { baseApi } from './baseApi'
 
 // Типы для заказов
-export interface OrderItem {
+interface OrderItem {
 	id: number
 	product_title: string
 	quantity: number
 	price: number
 }
 
-export interface Order {
+interface Order {
 	id: number
 	user_id: number
 	total_amount: number

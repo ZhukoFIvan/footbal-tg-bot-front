@@ -1,23 +1,20 @@
 'use client'
 
-import { useGetBonusInfoQuery, useGetBonusTransactionsQuery, useGetBonusMilestonesQuery } from '@/app/store/api/bonusApi'
-import { useAppSelector } from '@/app/store/hooks'
-import { selectIsTestMode } from '@/app/store/slices/authSlice'
+import {
+	useGetBonusInfoQuery,
+	useGetBonusTransactionsQuery,
+	useGetBonusMilestonesQuery,
+} from '@/app/store/api/bonusApi'
 import Loader from '@/app/components/Loader/Loader'
-import { Gift, TrendingUp, Clock } from 'lucide-react'
+import { Gift, Clock } from 'lucide-react'
 
 const rub = (n: number) => new Intl.NumberFormat('ru-RU').format(n) + ' ₽'
 
 export default function BonusPage() {
-	const isTestMode = useAppSelector(selectIsTestMode)
-
-	const { data: bonusInfo, isLoading: infoLoading } = useGetBonusInfoQuery(undefined, { skip: isTestMode })
-	const { data: transactions, isLoading: transLoading } = useGetBonusTransactionsQuery({ limit: 20 }, { skip: isTestMode })
-	const { data: milestones } = useGetBonusMilestonesQuery(undefined, { skip: isTestMode })
-
-	if (isTestMode) {
-		return <TestModeView />
-	}
+	const { data: bonusInfo, isLoading: infoLoading } = useGetBonusInfoQuery()
+	const { data: transactions, isLoading: transLoading } =
+		useGetBonusTransactionsQuery({ limit: 20 })
+	const { data: milestones } = useGetBonusMilestonesQuery()
 
 	if (infoLoading) {
 		return (
@@ -90,28 +87,40 @@ export default function BonusPage() {
 						</h3>
 						<div className='space-y-3'>
 							{Object.entries(milestones.milestones).map(([orders, bonus]) => {
-								const completed = bonusInfo && bonusInfo.total_orders >= parseInt(orders)
-								const isCurrent = bonusInfo?.next_milestone?.orders === parseInt(orders)
+								const completed =
+									bonusInfo && bonusInfo.total_orders >= parseInt(orders)
+								const isCurrent =
+									bonusInfo?.next_milestone?.orders === parseInt(orders)
 
 								return (
 									<div
 										key={orders}
 										className={`flex items-center justify-between p-3 rounded-xl transition-colors ${
-											isCurrent ? 'bg-primary/10 border border-primary/30' : 'bg-element-bg/60'
+											isCurrent
+												? 'bg-primary/10 border border-primary/30'
+												: 'bg-element-bg/60'
 										} ${completed ? 'opacity-50' : ''}`}
 									>
 										<div className='flex items-center gap-3'>
-											<div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-												completed ? 'bg-primary text-white' : 'bg-element-bg text-foreground/50'
-											}`}>
+											<div
+												className={`w-8 h-8 rounded-full flex items-center justify-center ${
+													completed
+														? 'bg-primary text-white'
+														: 'bg-element-bg text-foreground/50'
+												}`}
+											>
 												{completed ? '✓' : parseInt(orders)}
 											</div>
 											<div>
 												<p className='text-foreground font-medium'>
-													{parseInt(orders) === 1 ? '1 покупка' : `${orders} покупки`}
+													{parseInt(orders) === 1
+														? '1 покупка'
+														: `${orders} покупки`}
 												</p>
 												{bonus === 0 && (
-													<p className='text-xs text-foreground/50'>Усилитель B</p>
+													<p className='text-xs text-foreground/50'>
+														Усилитель B
+													</p>
 												)}
 											</div>
 										</div>
@@ -121,7 +130,9 @@ export default function BonusPage() {
 													{rub(bonus)}
 												</span>
 											) : (
-												<span className='text-foreground/50 text-sm'>Секретный подарок</span>
+												<span className='text-foreground/50 text-sm'>
+													Секретный подарок
+												</span>
 											)}
 										</div>
 									</div>
@@ -154,10 +165,13 @@ export default function BonusPage() {
 											{new Date(tr.created_at).toLocaleDateString('ru-RU')}
 										</p>
 									</div>
-									<div className={`font-semibold ${
-										tr.amount > 0 ? 'text-primary' : 'text-destructive'
-									}`}>
-										{tr.amount > 0 ? '+' : ''}{rub(Math.abs(tr.amount))}
+									<div
+										className={`font-semibold ${
+											tr.amount > 0 ? 'text-primary' : 'text-destructive'
+										}`}
+									>
+										{tr.amount > 0 ? '+' : ''}
+										{rub(Math.abs(tr.amount))}
 									</div>
 								</div>
 							))}
@@ -172,29 +186,3 @@ export default function BonusPage() {
 		</div>
 	)
 }
-
-function TestModeView() {
-	return (
-		<div className='min-h-screen bg-background pb-24'>
-			<div className='sticky top-0 bg-background/80 backdrop-blur-xl z-40 border-b border-white/5'>
-				<div className='container mx-auto px-4 py-6'>
-					<h1 className='text-3xl font-bold text-foreground'>Бонусы</h1>
-				</div>
-			</div>
-			<div className='container mx-auto px-4 py-12 text-center'>
-				<div className='max-w-md mx-auto'>
-					<div className='w-24 h-24 bg-element-bg rounded-full flex items-center justify-center mx-auto mb-6'>
-						<Gift className='w-12 h-12 text-foreground/50' />
-					</div>
-					<h2 className='text-2xl font-bold text-foreground mb-2'>
-						Тестовый режим
-					</h2>
-					<p className='text-foreground/70'>
-						Включите авторизацию для доступа к системе бонусов
-					</p>
-				</div>
-			</div>
-		</div>
-	)
-}
-

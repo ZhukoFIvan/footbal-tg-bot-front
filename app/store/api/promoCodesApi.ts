@@ -28,7 +28,7 @@ export interface CreatePromoCodeRequest {
 	is_active?: boolean
 }
 
-export interface UpdatePromoCodeRequest {
+interface UpdatePromoCodeRequest {
 	code?: string
 	discount_type?: 'percent' | 'fixed'
 	discount_value?: number
@@ -40,7 +40,7 @@ export interface UpdatePromoCodeRequest {
 	is_active?: boolean
 }
 
-export interface ApplyPromoResponse {
+interface ApplyPromoResponse {
 	promo_code: string
 	discount: number
 	discount_type: 'percent' | 'fixed'

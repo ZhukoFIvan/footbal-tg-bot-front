@@ -72,9 +72,7 @@ export default function AdminProductsPage() {
 		if (confirm(`Удалить товар "${title}"?`)) {
 			try {
 				await deleteProduct(id).unwrap()
-				console.log(`✅ Товар ${id} удален`)
-			} catch (err) {
-				console.error('Ошибка при удалении товара:', err)
+			} catch {
 				alert('Не удалось удалить товар')
 			}
 		}

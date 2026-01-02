@@ -67,26 +67,13 @@ export default function EditProductPage({
 	const [uploadImages, { isLoading: uploading }] =
 		useUploadProductImagesMutation()
 
-	// Логирование для отладки
-	console.log('Product loading state:', {
-		productLoading,
-		categoriesLoading,
-		sectionsLoading,
-		badgesLoading,
-		hasProduct: !!product,
-		productError,
-		productId,
-	})
-
 	const handleSubmit = async (data: ProductUpdateInput, images?: File[]) => {
 		try {
-			// 1. Обновляем данные продукта
 			await updateProduct({
 				id: productId,
 				data,
 			}).unwrap()
 
-			// 2. Загружаем новые изображения, если они выбраны
 			if (images && images.length > 0) {
 				const formData = new FormData()
 				images.forEach((file) => {

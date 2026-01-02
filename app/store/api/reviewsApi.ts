@@ -32,13 +32,13 @@ export interface ProductRating {
 	}
 }
 
-export interface CreateReviewRequest {
+interface CreateReviewRequest {
 	product_id: number
 	rating: number
 	comment?: string
 }
 
-export interface UpdateReviewRequest {
+interface UpdateReviewRequest {
 	rating: number
 	comment?: string
 }

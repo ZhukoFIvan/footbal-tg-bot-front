@@ -25,7 +25,7 @@ export interface Product {
 	badge: Badge | null // Один бейдж, может быть null
 }
 
-export interface ProductsParams {
+interface ProductsParams {
 	category_id?: number
 	section_id?: number
 	limit?: number

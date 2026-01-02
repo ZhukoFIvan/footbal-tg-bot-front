@@ -1,20 +1,13 @@
 import { z } from 'zod'
 
-// ============ ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ВАЛИДАЦИИ ============
-
-// Валидация slug (только латиница, цифры, дефисы)
-export const validateSlug = (slug: string): boolean => {
+const validateSlug = (slug: string): boolean => {
 	return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)
 }
 
-// Валидация HEX цвета
 export const validateHexColor = (color: string): boolean => {
 	return /^#[0-9A-F]{6}$/i.test(color)
 }
 
-// ============ СХЕМЫ ВАЛИДАЦИИ ============
-
-// Секции (Sections)
 export const sectionCreateSchema = z.object({
 	name: z
 		.string()
@@ -379,9 +372,6 @@ export type ProductUpdateInput = z.infer<typeof productUpdateSchema>
 
 export type BadgeCreateInput = z.infer<typeof badgeCreateSchema>
 export type BadgeUpdateInput = z.infer<typeof badgeUpdateSchema>
-
-export type BannerCreateInput = z.infer<typeof bannerCreateSchema>
-export type BannerUpdateInput = z.infer<typeof bannerUpdateSchema>
 
 export type BonusAddInput = z.infer<typeof bonusAddSchema>
 export type BonusSubtractInput = z.infer<typeof bonusSubtractSchema>

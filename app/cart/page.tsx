@@ -5,8 +5,6 @@ import { useRouter } from 'next/navigation'
 import { useGetCartQuery } from '@/app/store/api/serverCartApi'
 import { useCreateOrderMutation } from '@/app/store/api/ordersApi'
 import { useApplyPromoCodeMutation } from '@/app/store/api/promoCodesApi'
-import { useAppSelector } from '@/app/store/hooks'
-import { selectIsTestMode } from '@/app/store/slices/authSlice'
 import { Button } from '@/components/ui/button'
 import Loader from '@/app/components/Loader/Loader'
 import { ShoppingCartList } from '@/components/ShoppingCart/ShoppingCartList/ShoppingCartList'
@@ -17,7 +15,6 @@ import { Input } from '@/components/ui/input'
 
 export default function CartPage() {
 	const router = useRouter()
-	const isTestMode = useAppSelector(selectIsTestMode)
 
 	const [bonusToUse, setBonusToUse] = useState(0)
 	const [promoCode, setPromoCode] = useState('')
@@ -35,9 +32,7 @@ export default function CartPage() {
 		data: serverCart,
 		isLoading: cartLoading,
 		error: cartError,
-	} = useGetCartQuery(undefined, {
-		skip: isTestMode,
-	})
+	} = useGetCartQuery()
 	const [createOrder, { isLoading: orderLoading }] = useCreateOrderMutation()
 	const [applyPromo, { isLoading: promoLoading }] = useApplyPromoCodeMutation()
 
@@ -154,66 +149,68 @@ export default function CartPage() {
 
 				<BonusBlock bonusToUse={bonusToUse} setBonusToUse={setBonusToUse} />
 
-			<div className='bg-element-bg rounded-2xl p-4 mb-4'>
-				<div className='flex gap-2 mb-2'>
-					<Input
-						type='text'
-						placeholder='Введите промокод'
-						value={promoCode}
-						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-							setPromoCode(e.target.value)
-							setPromoError('')
-						}}
-						disabled={!!appliedPromo}
-						className='flex-1 !bg-background rounded-xl px-3 py-3 text-white placeholder:text-white/50 outline-none border border-white/10 focus:border-primary transition-colors disabled:opacity-50'
-					/>
-					{appliedPromo ? (
-						<Button
-							onClick={handleRemovePromo}
-							variant='outline'
-							className='px-4 rounded-xl border-white/10 hover:border-destructive hover:text-destructive'
-						>
-							Удалить
-						</Button>
-					) : (
-						<Button
-							onClick={handleApplyPromo}
-							disabled={promoLoading || !promoCode.trim()}
-							className='px-6 rounded-xl bg-primary hover:bg-primary-hover'
-						>
-							{promoLoading ? 'Проверка...' : 'Применить'}
-						</Button>
+				<div className='bg-element-bg rounded-2xl p-4 mb-4'>
+					<div className='flex gap-2 mb-2'>
+						<Input
+							type='text'
+							placeholder='Введите промокод'
+							value={promoCode}
+							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+								setPromoCode(e.target.value)
+								setPromoError('')
+							}}
+							disabled={!!appliedPromo}
+							className='flex-1 !bg-background rounded-xl px-3 py-3 text-white placeholder:text-white/50 outline-none border border-white/10 focus:border-primary transition-colors disabled:opacity-50'
+						/>
+						{appliedPromo ? (
+							<Button
+								onClick={handleRemovePromo}
+								variant='outline'
+								className='px-4 rounded-xl border-white/10 hover:border-destructive hover:text-destructive'
+							>
+								Удалить
+							</Button>
+						) : (
+							<Button
+								onClick={handleApplyPromo}
+								disabled={promoLoading || !promoCode.trim()}
+								className='px-6 rounded-xl bg-primary hover:bg-primary-hover'
+							>
+								{promoLoading ? 'Проверка...' : 'Применить'}
+							</Button>
+						)}
+					</div>
+
+					{promoError && (
+						<p className='text-destructive text-sm mt-2'>{promoError}</p>
+					)}
+
+					{appliedPromo && (
+						<div className='mt-3 p-3 bg-primary/10 rounded-xl border border-primary/20'>
+							<div className='flex items-center justify-between mb-1'>
+								<span className='text-sm text-foreground/70'>
+									Промокод применён:
+								</span>
+								<span className='text-sm font-semibold text-primary'>
+									{appliedPromo.code}
+								</span>
+							</div>
+							<div className='flex items-center justify-between'>
+								<span className='text-sm text-foreground/70'>Скидка:</span>
+								<span className='text-lg font-bold text-primary'>
+									-
+									{new Intl.NumberFormat('ru-RU').format(appliedPromo.discount)}{' '}
+									₽
+								</span>
+							</div>
+						</div>
 					)}
 				</div>
 
-				{promoError && (
-					<p className='text-destructive text-sm mt-2'>{promoError}</p>
-				)}
-
-				{appliedPromo && (
-					<div className='mt-3 p-3 bg-primary/10 rounded-xl border border-primary/20'>
-						<div className='flex items-center justify-between mb-1'>
-							<span className='text-sm text-foreground/70'>
-								Промокод применён:
-							</span>
-							<span className='text-sm font-semibold text-primary'>
-								{appliedPromo.code}
-							</span>
-						</div>
-						<div className='flex items-center justify-between'>
-							<span className='text-sm text-foreground/70'>Скидка:</span>
-							<span className='text-lg font-bold text-primary'>
-								-{new Intl.NumberFormat('ru-RU').format(appliedPromo.discount)} ₽
-							</span>
-						</div>
-					</div>
-				)}
-			</div>
-
 				<TotalBlock
-				bonusToUse={bonusToUse}
-				promoDiscount={appliedPromo?.discount || 0}
-			/>
+					bonusToUse={bonusToUse}
+					promoDiscount={appliedPromo?.discount || 0}
+				/>
 
 				<Button
 					onClick={handleCheckout}

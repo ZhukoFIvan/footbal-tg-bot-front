@@ -1,11 +1,9 @@
 import { useState } from 'react'
-import { useAppSelector } from '@/app/store'
 import {
 	useGetCartQuery,
 	useRemoveCartItemMutation,
 	useUpdateCartItemMutation,
 } from '@/app/store/api/serverCartApi'
-import { selectIsTestMode } from '@/app/store/slices/authSlice'
 import { Button } from '@/components/ui/button'
 import { Minus, Plus, Trash2 } from 'lucide-react'
 import Image from 'next/image'
@@ -13,15 +11,8 @@ import Image from 'next/image'
 export const ShoppingCartList = () => {
 	const [updateCartItem] = useUpdateCartItemMutation()
 	const [removeCartItem] = useRemoveCartItemMutation()
-	const isTestMode = useAppSelector(selectIsTestMode)
 	const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({})
-	const {
-		data: serverCart,
-		isLoading: cartLoading,
-		error: cartError,
-	} = useGetCartQuery(undefined, {
-		skip: isTestMode,
-	})
+	const { data: serverCart } = useGetCartQuery()
 
 	const getImageUrl = (imagePath: string | null) => {
 		if (!imagePath) return '/placeholder.png'
@@ -41,14 +32,13 @@ export const ShoppingCartList = () => {
 	}
 
 	const handleDecrement = async (itemId: number, currentQty: number) => {
-		console.log('Decrement clicked:', itemId, 'current qty:', currentQty)
 		try {
 			if (currentQty > 1) {
 				await updateCartItem({ itemId, quantity: currentQty - 1 }).unwrap()
 			} else {
 				await removeCartItem(itemId).unwrap()
 			}
-		} catch (e) {
+		} catch {
 			alert('Не удалось обновить количество')
 		}
 	}
@@ -63,7 +53,6 @@ export const ShoppingCartList = () => {
 
 	const rub = (n: number) => new Intl.NumberFormat('ru-RU').format(n) + ' ₽'
 
-	// Сортируем товары по ID (по возрастанию), чтобы порядок не менялся
 	const sortedItems = serverCart?.items
 		? [...serverCart.items].sort((a, b) => a.id - b.id)
 		: []

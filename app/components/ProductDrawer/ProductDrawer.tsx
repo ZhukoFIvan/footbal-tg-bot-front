@@ -17,8 +17,6 @@ import {
 import { useAddToServerCartMutation } from '@/app/store/api/serverCartApi'
 import { useIsInCart } from '@/app/store/hooks/useCart'
 import { useRouter } from 'next/navigation'
-import { useAppSelector } from '@/app/store/hooks'
-import { selectIsTestMode } from '@/app/store/slices/authSlice'
 import { ProductReviews } from '../Reviews/ProductReviews'
 import { useGetProductRatingQuery } from '@/app/store/api/reviewsApi'
 
@@ -27,11 +25,11 @@ const rub = (n: number) => new Intl.NumberFormat('ru-RU').format(n) + ' ₽'
 const getImageUrl = (imagePath: string | null) => {
 	if (!imagePath) return '/placeholder.png'
 	if (imagePath.startsWith('http')) return imagePath
-	
+
 	// Убираем /api из URL для uploads (картинки лежат на корне домена)
 	const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 	const baseUrl = apiUrl.replace('/api', '')
-	
+
 	// Добавляем слэш если его нет
 	const path = imagePath.startsWith('/') ? imagePath : `/${imagePath}`
 	return `${baseUrl}${path}`
@@ -73,7 +71,6 @@ export default function ProductDrawer({
 	onClose,
 }: ProductDrawerProps) {
 	const router = useRouter()
-	const isTestMode = useAppSelector(selectIsTestMode)
 	const isInCart = useIsInCart(product?.id || 0)
 	const [addToCart, { isLoading }] = useAddToServerCartMutation()
 	const [api, setApi] = useState<CarouselApi>()
@@ -127,20 +124,13 @@ export default function ProductDrawer({
 	const discount = calculateDiscount(product.price, product.old_price)
 
 	const handleAddToCart = async () => {
-		if (isTestMode) {
-			alert('Включите авторизацию для добавления товаров в корзину')
-			return
-		}
-
 		if (!isInCart && product) {
 			try {
 				await addToCart({
 					product_id: product.id,
 					quantity: 1,
 				}).unwrap()
-				console.log(`✅ Added product ${product.id} to cart`)
-			} catch (error) {
-				console.error('Failed to add to cart:', error)
+			} catch {
 				alert('Не удалось добавить товар в корзину')
 			}
 		}
@@ -237,7 +227,10 @@ export default function ProductDrawer({
 													}`}
 													unoptimized
 													onLoad={() =>
-														setLoadedImages((prev) => ({ ...prev, [idx]: true }))
+														setLoadedImages((prev) => ({
+															...prev,
+															[idx]: true,
+														}))
 													}
 													priority={idx === 0}
 												/>

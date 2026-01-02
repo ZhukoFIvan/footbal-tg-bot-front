@@ -1,7 +1,6 @@
 import { baseApi } from './baseApi'
 
-// Типы для админки
-export interface AdminSection {
+interface AdminSection {
 	id: number
 	name: string
 	image: string | null
@@ -12,7 +11,7 @@ export interface AdminSection {
 	created_at: string
 }
 
-export interface AdminCategory {
+interface AdminCategory {
 	id: number
 	title: string
 	slug: string
@@ -25,7 +24,7 @@ export interface AdminCategory {
 	created_at: string
 }
 
-export interface AdminProduct {
+interface AdminProduct {
 	id: number
 	category_id: number
 	section_id: number | null
@@ -97,9 +96,8 @@ export interface AdminStats {
 	total_sections: number
 }
 
-export const adminApi = baseApi.injectEndpoints({
+const adminApi = baseApi.injectEndpoints({
 	endpoints: (builder) => ({
-		// Dev Token
 		getDevToken: builder.mutation<
 			{ access_token: string; is_admin: boolean },
 			{ telegram_id: number }
@@ -194,72 +192,72 @@ export const adminApi = baseApi.injectEndpoints({
 			invalidatesTags: ['Categories'],
 		}),
 
-	// Products
-	getAdminProducts: builder.query<
-		AdminProduct[],
-		{ limit?: number; offset?: number }
-	>({
-		query: ({ limit = 100, offset = 0 }) =>
-			`/admin/products?limit=${limit}&offset=${offset}`,
-		providesTags: ['Products'],
-	}),
-
-	getAdminProduct: builder.query<AdminProduct, number>({
-		query: (id) => `/admin/products/${id}`,
-		providesTags: ['Products'],
-	}),
-
-	createProduct: builder.mutation<AdminProduct, Partial<AdminProduct>>({
-		query: (body) => ({
-			url: '/admin/products',
-			method: 'POST',
-			body,
+		// Products
+		getAdminProducts: builder.query<
+			AdminProduct[],
+			{ limit?: number; offset?: number }
+		>({
+			query: ({ limit = 100, offset = 0 }) =>
+				`/admin/products?limit=${limit}&offset=${offset}`,
+			providesTags: ['Products'],
 		}),
-		invalidatesTags: ['Products'],
-	}),
 
-	updateProduct: builder.mutation<
-		AdminProduct,
-		{ id: number; data: Partial<AdminProduct> }
-	>({
-		query: ({ id, data }) => ({
-			url: `/admin/products/${id}`,
-			method: 'PATCH',
-			body: data,
+		getAdminProduct: builder.query<AdminProduct, number>({
+			query: (id) => `/admin/products/${id}`,
+			providesTags: ['Products'],
 		}),
-		invalidatesTags: ['Products'],
-	}),
 
-	deleteProduct: builder.mutation<void, number>({
-		query: (id) => ({
-			url: `/admin/products/${id}`,
-			method: 'DELETE',
+		createProduct: builder.mutation<AdminProduct, Partial<AdminProduct>>({
+			query: (body) => ({
+				url: '/admin/products',
+				method: 'POST',
+				body,
+			}),
+			invalidatesTags: ['Products'],
 		}),
-		invalidatesTags: ['Products'],
-	}),
 
-	uploadProductImages: builder.mutation<
-		{ images: string[] },
-		{ id: number; body: FormData }
-	>({
-		query: ({ id, body }) => ({
-			url: `/admin/products/${id}/images`,
-			method: 'POST',
-			body,
+		updateProduct: builder.mutation<
+			AdminProduct,
+			{ id: number; data: Partial<AdminProduct> }
+		>({
+			query: ({ id, data }) => ({
+				url: `/admin/products/${id}`,
+				method: 'PATCH',
+				body: data,
+			}),
+			invalidatesTags: ['Products'],
 		}),
-		invalidatesTags: ['Products'],
-	}),
 
-	deleteProductImage: builder.mutation<
-		void,
-		{ id: number; imageIndex: number }
-	>({
-		query: ({ id, imageIndex }) => ({
-			url: `/admin/products/${id}/images/${imageIndex}`,
-			method: 'DELETE',
+		deleteProduct: builder.mutation<void, number>({
+			query: (id) => ({
+				url: `/admin/products/${id}`,
+				method: 'DELETE',
+			}),
+			invalidatesTags: ['Products'],
 		}),
-		invalidatesTags: ['Products'],
-	}),
+
+		uploadProductImages: builder.mutation<
+			{ images: string[] },
+			{ id: number; body: FormData }
+		>({
+			query: ({ id, body }) => ({
+				url: `/admin/products/${id}/images`,
+				method: 'POST',
+				body,
+			}),
+			invalidatesTags: ['Products'],
+		}),
+
+		deleteProductImage: builder.mutation<
+			void,
+			{ id: number; imageIndex: number }
+		>({
+			query: ({ id, imageIndex }) => ({
+				url: `/admin/products/${id}/images/${imageIndex}`,
+				method: 'DELETE',
+			}),
+			invalidatesTags: ['Products'],
+		}),
 
 		// Badges
 		getAdminBadges: builder.query<AdminBadge[], void>({
@@ -409,7 +407,6 @@ export const adminApi = baseApi.injectEndpoints({
 })
 
 export const {
-	useGetDevTokenMutation,
 	useGetAdminSectionsQuery,
 	useCreateSectionMutation,
 	useUpdateSectionMutation,
@@ -431,7 +428,6 @@ export const {
 	useUpdateBadgeMutation,
 	useDeleteBadgeMutation,
 	useGetAdminBannersQuery,
-	useCreateBannerMutation,
 	useUpdateBannerMutation,
 	useDeleteBannerMutation,
 	useUploadBannerImageMutation,
@@ -443,4 +439,3 @@ export const {
 	useGetAdminBonusTransactionsQuery,
 	useGetAdminStatsQuery,
 } = adminApi
-

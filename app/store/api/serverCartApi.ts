@@ -1,7 +1,6 @@
 import { baseApi } from './baseApi'
 
-// Типы для корзины
-export interface CartItem {
+interface CartItem {
 	id: number
 	product_id: number
 	product_title: string
@@ -12,7 +11,7 @@ export interface CartItem {
 	subtotal: number
 }
 
-export interface CartResponse {
+interface CartResponse {
 	id: number
 	items: CartItem[]
 	total_items: number
@@ -21,14 +20,9 @@ export interface CartResponse {
 	max_bonus_usage: number
 	bonus_will_earn: number
 }
-
-export interface AddToCartRequest {
+interface AddToCartRequest {
 	product_id: number
 	quantity?: number
-}
-
-export interface UpdateCartItemRequest {
-	quantity: number
 }
 
 export const cartApi = baseApi.injectEndpoints({

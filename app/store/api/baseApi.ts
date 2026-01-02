@@ -9,10 +9,9 @@ export const baseApi = createApi({
 		prepareHeaders: (headers, { getState }) => {
 			// Получаем токен из state
 			const token = (getState() as RootState).auth.token
-			const isTestMode = (getState() as RootState).auth.isTestMode
 
-			// Если есть токен и не тестовый режим - добавляем в заголовки
-			if (token && !isTestMode) {
+			// Если есть токен - добавляем в заголовки
+			if (token) {
 				headers.set('Authorization', `Bearer ${token}`)
 			}
 

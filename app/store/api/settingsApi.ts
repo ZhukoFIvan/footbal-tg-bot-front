@@ -1,7 +1,7 @@
 import { baseApi } from './baseApi'
 
 // Типы для настроек сайта
-export interface SiteSettings {
+interface SiteSettings {
 	snow_enabled: boolean
 }
 
