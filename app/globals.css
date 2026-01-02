@@ -1,26 +1,189 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primary: #21BC60;
+  --color-primary-hover: #1da554;
+  --color-primary-light: #e8f8f0;
+  --color-element-bg: var(--element-bg);
+  --color-secondary-text: #373737;
+  --font-sans: var(--font-sf-pro), -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sf-pro), system-ui, sans-serif;
+}
+
+/* Светлая тема (по умолчанию) */
+:root {
+  --radius: 0.625rem;
+  
+  /* Основные цвета - светлая тема */
+  --background: #ffffff;
+  --foreground: #17191E;
+  --element-bg: rgba(52, 52, 58, 0.4);
+  
+  /* Карточки */
+  --card: #ffffff;
+  --card-foreground: #171717;
+  
+  /* Popover */
+  --popover: #ffffff;
+  --popover-foreground: #171717;
+  
+  /* Primary (используется из @theme - #21BC60) */
+  --primary: #21BC60;
+  --primary-foreground: #ffffff;
+  
+  /* Secondary */
+  --secondary: #f5f5f5;
+  --secondary-foreground: #171717;
+  
+  /* Muted */
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  
+  /* Accent */
+  --accent: #f5f5f5;
+  --accent-foreground: #171717;
+  
+  /* Destructive */
+  --destructive: #ef4444;
+  
+  /* Borders & Input */
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #a3a3a3;
+  
+  /* Charts */
+  --chart-1: #f97316;
+  --chart-2: #3b82f6;
+  --chart-3: #8b5cf6;
+  --chart-4: #eab308;
+  --chart-5: #ec4899;
+  
+  /* Sidebar */
+  --sidebar: #fafafa;
+  --sidebar-foreground: #171717;
+  --sidebar-primary: #171717;
+  --sidebar-primary-foreground: #fafafa;
+  --sidebar-accent: #f5f5f5;
+  --sidebar-accent-foreground: #171717;
+  --sidebar-border: #e5e5e5;
+  --sidebar-ring: #a3a3a3;
+}
+
+/* Темная тема */
+.dark {
+  /* Основные цвета - темная тема */
+  --background: #17191E;
+  --foreground: #ffffff;
+  --element-bg: rgba(52, 52, 58, 0.4);
+  
+  /* Карточки */
+  --card: #1f2127;
+  --card-foreground: #ffffff;
+  
+  /* Popover */
+  --popover: #1f2127;
+  --popover-foreground: #ffffff;
+  
+  /* Primary (используется из @theme - #21BC60) */
+  --primary: #21BC60;
+  --primary-foreground: #ffffff;
+  
+  /* Secondary */
+  --secondary: #2a2c32;
+  --secondary-foreground: #ffffff;
+  
+  /* Muted */
+  --muted: #2a2c32;
+  --muted-foreground: #a1a1aa;
+  
+  /* Accent */
+  --accent: #2a2c32;
+  --accent-foreground: #ffffff;
+  
+  /* Destructive */
+  --destructive: #ef4444;
+  
+  /* Borders & Input */
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.15);
+  --ring: #71717a;
+  
+  /* Charts */
+  --chart-1: #8b5cf6;
+  --chart-2: #06b6d4;
+  --chart-3: #eab308;
+  --chart-4: #a855f7;
+  --chart-5: #f43f5e;
+  
+  /* Sidebar */
+  --sidebar: #1f2127;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #8b5cf6;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #2a2c32;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #71717a;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Скрытие скроллбара для горизонтальных слайдеров */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }

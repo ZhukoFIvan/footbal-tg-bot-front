@@ -1,0 +1,163 @@
+// Пример API для работы с продуктами
+// Переименуйте файл в productsApi.ts когда будете использовать
+
+import { baseApi } from './baseApi'
+
+export interface Product {
+	id: number
+	name: string
+	description: string
+	price: number
+	image: string
+	sectionId: number
+	inStock: boolean
+}
+
+export interface ProductsResponse {
+	products: Product[]
+	total: number
+	page: number
+}
+
+export interface CreateProductRequest {
+	name: string
+	description: string
+	price: number
+	image: string
+	sectionId: number
+}
+
+export const productsApi = baseApi.injectEndpoints({
+	endpoints: (builder) => ({
+		// GET запрос - получение списка продуктов
+		getProducts: builder.query<
+			ProductsResponse,
+			{ sectionId?: number; page?: number; limit?: number }
+		>({
+			query: ({ sectionId, page = 1, limit = 20 }) => {
+				const params = new URLSearchParams()
+				if (sectionId) params.append('sectionId', sectionId.toString())
+				params.append('page', page.toString())
+				params.append('limit', limit.toString())
+
+				return `/products?${params.toString()}`
+			},
+			providesTags: (result) =>
+				result
+					? [
+							...result.products.map(({ id }) => ({
+								type: 'Products' as const,
+								id,
+							})),
+							{ type: 'Products', id: 'LIST' },
+					  ]
+					: [{ type: 'Products', id: 'LIST' }],
+		}),
+
+		// GET запрос - получение одного продукта
+		getProductById: builder.query<Product, number>({
+			query: (id) => `/products/${id}`,
+			providesTags: (result, error, id) => [{ type: 'Products', id }],
+		}),
+
+		// POST запрос - создание продукта
+		createProduct: builder.mutation<Product, CreateProductRequest>({
+			query: (body) => ({
+				url: '/products',
+				method: 'POST',
+				body,
+			}),
+			// Инвалидируем кэш списка продуктов после создания
+			invalidatesTags: [{ type: 'Products', id: 'LIST' }],
+		}),
+
+		// PUT запрос - обновление продукта
+		updateProduct: builder.mutation<
+			Product,
+			{ id: number; data: Partial<Product> }
+		>({
+			query: ({ id, data }) => ({
+				url: `/products/${id}`,
+				method: 'PUT',
+				body: data,
+			}),
+			// Инвалидируем кэш конкретного продукта и списка
+			invalidatesTags: (result, error, { id }) => [
+				{ type: 'Products', id },
+				{ type: 'Products', id: 'LIST' },
+			],
+		}),
+
+		// DELETE запрос - удаление продукта
+		deleteProduct: builder.mutation<void, number>({
+			query: (id) => ({
+				url: `/products/${id}`,
+				method: 'DELETE',
+			}),
+			invalidatesTags: (result, error, id) => [
+				{ type: 'Products', id },
+				{ type: 'Products', id: 'LIST' },
+			],
+		}),
+	}),
+})
+
+// Экспортируем хуки для использования в компонентах
+export const {
+	useGetProductsQuery,
+	useGetProductByIdQuery,
+	useCreateProductMutation,
+	useUpdateProductMutation,
+	useDeleteProductMutation,
+} = productsApi
+
+// Пример использования в компоненте:
+/*
+'use client'
+
+import { useGetProductsQuery, useCreateProductMutation } from '@/app/store/api/productsApi'
+
+function ProductsList() {
+  // Query - автоматически загружает данные
+  const { data, isLoading, error } = useGetProductsQuery({ 
+    sectionId: 1, 
+    page: 1 
+  })
+
+  // Mutation - для изменения данных
+  const [createProduct, { isLoading: isCreating }] = useCreateProductMutation()
+
+  const handleCreate = async () => {
+    try {
+      await createProduct({
+        name: 'Новый продукт',
+        description: 'Описание',
+        price: 100,
+        image: '/image.jpg',
+        sectionId: 1,
+      }).unwrap()
+      
+      alert('Продукт создан!')
+    } catch (error) {
+      alert('Ошибка создания')
+    }
+  }
+
+  if (isLoading) return <div>Загрузка...</div>
+  if (error) return <div>Ошибка!</div>
+
+  return (
+    <div>
+      <button onClick={handleCreate} disabled={isCreating}>
+        Создать продукт
+      </button>
+      
+      {data?.products.map(product => (
+        <div key={product.id}>{product.name}</div>
+      ))}
+    </div>
+  )
+}
+*/
+
+
