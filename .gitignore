@@ -43,3 +43,8 @@ next-env.d.ts
 # documentation (except README)
 *.md
 !README.md
+
+# build archives
+*.tar.gz
+*.zip
+*.rar
