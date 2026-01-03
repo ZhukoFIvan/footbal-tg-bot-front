@@ -45,6 +45,7 @@ interface ProductFormProps {
 	sections: Section[]
 	badges: Badge[]
 	existingImages?: string[]
+	onDeleteExisting?: (index: number, url: string) => void
 	submitText?: string
 }
 
@@ -57,6 +58,7 @@ export function ProductForm({
 	sections,
 	badges,
 	existingImages,
+	onDeleteExisting,
 	submitText = 'Сохранить',
 }: ProductFormProps) {
 	const schema = mode === 'create' ? productCreateSchema : productUpdateSchema
@@ -115,6 +117,7 @@ export function ProductForm({
 					value={images}
 					onChange={(files) => setImages((files as File[]) || [])}
 					previewUrls={existingImages}
+					onDeleteExisting={onDeleteExisting}
 				/>
 
 				<FormInput

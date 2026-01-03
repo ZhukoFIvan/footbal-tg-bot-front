@@ -1,6 +1,13 @@
 'use client'
 
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import {
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from '@/components/ui/form'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Control, FieldPath, FieldValues } from 'react-hook-form'
 
@@ -35,9 +42,15 @@ export function FormCheckbox<TFieldValues extends FieldValues = FieldValues>({
 									className='w-5 h-5 text-primary bg-background border-white/10 rounded data-[state=checked]:bg-primary data-[state=checked]:border-primary'
 								/>
 							</FormControl>
-							<FormLabel className='text-foreground font-medium cursor-pointer mb-0'>{label}</FormLabel>
+							<FormLabel className='text-foreground font-medium cursor-pointer mb-0'>
+								{label}
+							</FormLabel>
 						</div>
-						{description && <FormDescription className='text-xs text-foreground/50 mt-2 ml-8'>{description}</FormDescription>}
+						{description && (
+							<FormDescription className='text-xs text-foreground/50 mt-2 ml-8'>
+								{description}
+							</FormDescription>
+						)}
 						<FormMessage className='text-xs text-destructive mt-1 ml-8' />
 					</div>
 				</FormItem>
@@ -45,4 +58,3 @@ export function FormCheckbox<TFieldValues extends FieldValues = FieldValues>({
 		/>
 	)
 }
-

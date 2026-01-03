@@ -44,7 +44,7 @@ export function FormInput<TFieldValues extends FieldValues = FieldValues>({
 			name={name}
 			render={({ field, fieldState }) => (
 				<FormItem>
-					<div className='bg-element-bg rounded-2xl p-6'>
+					<div className='bg-element-bg rounded-2xl p-3'>
 						<FormLabel className='text-sm font-medium text-foreground mb-2'>
 							{label} {required && <span className='text-destructive'>*</span>}
 						</FormLabel>

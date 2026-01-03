@@ -1,15 +1,16 @@
 'use client'
 
-import { use } from 'react'
+import { use, useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import {
-	useGetAdminProductQuery,
 	useUpdateProductMutation,
 	useUploadProductImagesMutation,
+	useDeleteProductImageMutation,
 	useGetAdminCategoriesQuery,
 	useGetAdminSectionsQuery,
 	useGetAdminBadgesQuery,
 } from '@/app/store/api/adminApi'
+import { useGetProductQuery } from '@/app/store/api/productsApi'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import Loader from '@/app/components/Loader/Loader'
@@ -56,7 +57,7 @@ export default function EditProductPage({
 		data: product,
 		isLoading: productLoading,
 		error: productError,
-	} = useGetAdminProductQuery(productId)
+	} = useGetProductQuery(productId)
 	const { data: categories, isLoading: categoriesLoading } =
 		useGetAdminCategoriesQuery()
 	const { data: sections, isLoading: sectionsLoading } =
@@ -66,6 +67,32 @@ export default function EditProductPage({
 	const [updateProduct, { isLoading: updating }] = useUpdateProductMutation()
 	const [uploadImages, { isLoading: uploading }] =
 		useUploadProductImagesMutation()
+	const [deleteImage, { isLoading: deleting }] = useDeleteProductImageMutation()
+
+	// Store initial image URLs to maintain stable indices
+	const [initialImageUrls, setInitialImageUrls] = useState<string[]>([])
+
+	// Initialize image URLs only once when product loads
+	useEffect(() => {
+		if (product && initialImageUrls.length === 0) {
+			const urls = parseImages(product.images)
+				.map((img) => getImageUrl(img))
+				.filter((url): url is string => url !== null)
+			setInitialImageUrls(urls)
+		}
+	}, [product])
+
+	const handleDeleteExistingImage = async (imageIndex: number, imageUrl: string) => {
+		try {
+			await deleteImage({
+				id: productId,
+				imageIndex,
+			}).unwrap()
+		} catch (err) {
+			console.error('Error deleting image:', err)
+			alert('Ошибка при удалении изображения')
+		}
+	}
 
 	const handleSubmit = async (data: ProductUpdateInput, images?: File[]) => {
 		try {
@@ -132,11 +159,6 @@ export default function EditProductPage({
 		)
 	}
 
-	const existingImageUrls =
-		parseImages(product.images)
-			.map((img) => getImageUrl(img))
-			.filter((url): url is string => url !== null) || []
-
 	return (
 		<div className='min-h-screen bg-background pb-24'>
 			{/* Header */}
@@ -172,7 +194,7 @@ export default function EditProductPage({
 						stock_count: product.stock_count,
 						category_id: product.category_id,
 						section_id: product.section_id,
-						badge_id: product.badge_id,
+						badge_id: product.badge?.id || null,
 						is_active: product.is_active,
 					}}
 					onSubmit={handleSubmit}
@@ -180,7 +202,8 @@ export default function EditProductPage({
 					categories={categories || []}
 					sections={sections || []}
 					badges={badges || []}
-					existingImages={existingImageUrls}
+					existingImages={initialImageUrls}
+					onDeleteExisting={handleDeleteExistingImage}
 				/>
 			</div>
 		</div>
