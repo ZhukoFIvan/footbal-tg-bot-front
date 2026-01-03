@@ -1,10 +1,19 @@
+'use client'
+import { Button } from '@/components/ui/button'
+import { ArrowLeft } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+
 export default function UserAgreement() {
+	const router = useRouter()
 	return (
 		<div className='min-h-screen bg-background pb-24'>
 			{/* Header */}
 			<div className='sticky top-0 bg-background/80 backdrop-blur-xl z-40 border-b border-white/5'>
-				<div className='container mx-auto px-4 py-4'>
-					<h1 className='text-2xl font-bold text-foreground text-center'>
+				<div className='container mx-auto px-4 py-4 flex items-center gap-3'>
+					<Button onClick={() => router.push('/')} variant='ghost' size='icon'>
+						<ArrowLeft className='w-5 h-5' />
+					</Button>
+					<h1 className='text-xl font-bold text-foreground text-center'>
 						Пользовательское соглашение
 					</h1>
 				</div>

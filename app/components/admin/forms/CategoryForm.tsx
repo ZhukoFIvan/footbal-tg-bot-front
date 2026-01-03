@@ -70,7 +70,7 @@ export function CategoryForm({
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-6'>
 				{/* Images */}
-				<div className='grid grid-cols-2 gap-4'>
+				<div className='grid gap-4'>
 					<ImageUpload
 						label='Главное изображение'
 						aspectRatio='square'

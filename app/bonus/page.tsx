@@ -28,11 +28,8 @@ export default function BonusPage() {
 		<div className='min-h-screen bg-background pb-24'>
 			{/* Header */}
 			<div className='sticky top-0 bg-background/80 backdrop-blur-xl z-40 border-b border-white/5'>
-				<div className='container mx-auto px-4 py-6'>
-					<h1 className='text-3xl font-bold text-foreground'>Бонусы</h1>
-					<p className='text-foreground/70 mt-1'>
-						Покупайте и получайте бонусы рублями
-					</p>
+				<div className='container mx-auto px-4 py-3'>
+					<h1 className='text-2xl font-bold text-foreground'>Бонусы</h1>
 				</div>
 			</div>
 

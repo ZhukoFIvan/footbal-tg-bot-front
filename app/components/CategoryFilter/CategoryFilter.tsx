@@ -86,20 +86,19 @@ export default function CategoryFilter({
 				onTouchStart={handleTouchStart}
 				onTouchMove={handleTouchMove}
 				onTouchEnd={handleTouchEnd}
-				className='flex gap-2 overflow-x-auto px-4 py-2 scrollbar-hide cursor-grab active:cursor-grabbing'
+				className='flex gap-2 overflow-x-auto py-2 scrollbar-hide cursor-grab active:cursor-grabbing'
 				style={{
 					scrollbarWidth: 'none',
 					msOverflowStyle: 'none',
 				}}
 			>
-				{/* Кнопка "Все" */}
 				<Button
 					onClick={() => onCategoryChange(null)}
 					variant={selectedCategoryId === null ? 'default' : 'secondary'}
 					className={cn(
 						'rounded-full text-sm font-medium shrink-0 whitespace-nowrap h-9',
 						selectedCategoryId === null
-							? 'bg-primary text-white hover:bg-primary-hover shadow-[0_0_20px_rgba(33,188,96,0.4)]'
+							? 'bg-primary text-white hover:bg-primary-hover '
 							: 'bg-element-bg text-foreground/70 hover:text-foreground hover:bg-element-bg/80'
 					)}
 				>
@@ -117,7 +116,7 @@ export default function CategoryFilter({
 						className={cn(
 							'rounded-full text-sm font-medium shrink-0 whitespace-nowrap h-9',
 							selectedCategoryId === category.id
-								? 'bg-primary text-white hover:bg-primary-hover shadow-[0_0_20px_rgba(33,188,96,0.4)]'
+								? 'bg-primary text-white hover:bg-primary-hover'
 								: 'bg-element-bg text-foreground/70 hover:text-foreground hover:bg-element-bg/80'
 						)}
 					>

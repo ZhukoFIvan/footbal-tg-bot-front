@@ -96,6 +96,91 @@ export interface AdminStats {
 	total_sections: number
 }
 
+// Статистика - Overview
+export interface OverviewStats {
+	total_users: number
+	total_users_with_orders: number
+	total_orders: number
+	total_revenue: number
+	total_products: number
+	total_sections: number
+	total_categories: number
+	active_products: number
+	out_of_stock_products: number
+}
+
+// Статистика - Пользователи
+export interface UserStats {
+	total_users: number
+	new_users_today: number
+	new_users_this_week: number
+	new_users_this_month: number
+	banned_users: number
+	admin_users: number
+}
+
+// Статистика - Заказы
+export interface OrderStats {
+	total_orders: number
+	pending_orders: number
+	paid_orders: number
+	completed_orders: number
+	cancelled_orders: number
+	orders_today: number
+	orders_this_week: number
+	orders_this_month: number
+}
+
+// Статистика - Выручка
+export interface RevenueStats {
+	total_revenue: number
+	revenue_today: number
+	revenue_this_week: number
+	revenue_this_month: number
+	average_order_value: number
+	currency: string
+}
+
+// Статистика - Товары
+export interface ProductStats {
+	total_products: number
+	active_products: number
+	inactive_products: number
+	out_of_stock_products: number
+	low_stock_products: number
+	total_stock_value: number
+}
+
+// Топ товары
+export interface TopProduct {
+	product_id: number
+	product_title: string
+	orders_count: number
+	revenue: number
+}
+
+// Последние пользователи
+export interface RecentUser {
+	id: number
+	telegram_id: number
+	username: string | null
+	first_name: string | null
+	is_banned: boolean
+	is_admin: boolean
+	created_at: string
+}
+
+// Последние заказы
+export interface RecentOrder {
+	id: number
+	user_id: number
+	product_id: number
+	status: string
+	amount: number
+	currency: string
+	created_at: string
+}
+
 const adminApi = baseApi.injectEndpoints({
 	endpoints: (builder) => ({
 		getDevToken: builder.mutation<
@@ -398,9 +483,57 @@ const adminApi = baseApi.injectEndpoints({
 			providesTags: ['AdminBonus'],
 		}),
 
-		// Statistics
+		// Statistics - Old endpoint
 		getAdminStats: builder.query<AdminStats, void>({
 			query: () => '/admin/stats',
+			providesTags: ['AdminStats'],
+		}),
+
+		// Statistics - Overview
+		getStatsOverview: builder.query<OverviewStats, void>({
+			query: () => '/admin/stats/overview',
+			providesTags: ['AdminStats'],
+		}),
+
+		// Statistics - Users
+		getStatsUsers: builder.query<UserStats, void>({
+			query: () => '/admin/stats/users',
+			providesTags: ['AdminStats'],
+		}),
+
+		// Statistics - Orders
+		getStatsOrders: builder.query<OrderStats, void>({
+			query: () => '/admin/stats/orders',
+			providesTags: ['AdminStats'],
+		}),
+
+		// Statistics - Revenue
+		getStatsRevenue: builder.query<RevenueStats, void>({
+			query: () => '/admin/stats/revenue',
+			providesTags: ['AdminStats'],
+		}),
+
+		// Statistics - Products
+		getStatsProducts: builder.query<ProductStats, void>({
+			query: () => '/admin/stats/products',
+			providesTags: ['AdminStats'],
+		}),
+
+		// Statistics - Top Products
+		getStatsTopProducts: builder.query<TopProduct[], number | void>({
+			query: (limit = 10) => `/admin/stats/top-products?limit=${limit}`,
+			providesTags: ['AdminStats'],
+		}),
+
+		// Statistics - Recent Users
+		getStatsRecentUsers: builder.query<RecentUser[], number | void>({
+			query: (limit = 10) => `/admin/stats/recent-users?limit=${limit}`,
+			providesTags: ['AdminStats'],
+		}),
+
+		// Statistics - Recent Orders
+		getStatsRecentOrders: builder.query<RecentOrder[], number | void>({
+			query: (limit = 10) => `/admin/stats/recent-orders?limit=${limit}`,
 			providesTags: ['AdminStats'],
 		}),
 	}),
@@ -438,4 +571,12 @@ export const {
 	useSetBalanceMutation,
 	useGetAdminBonusTransactionsQuery,
 	useGetAdminStatsQuery,
+	useGetStatsOverviewQuery,
+	useGetStatsUsersQuery,
+	useGetStatsOrdersQuery,
+	useGetStatsRevenueQuery,
+	useGetStatsProductsQuery,
+	useGetStatsTopProductsQuery,
+	useGetStatsRecentUsersQuery,
+	useGetStatsRecentOrdersQuery,
 } = adminApi
