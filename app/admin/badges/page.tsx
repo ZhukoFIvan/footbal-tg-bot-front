@@ -2,10 +2,14 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useGetAdminBadgesQuery, useDeleteBadgeMutation } from '@/app/store/api/adminApi'
+import {
+	useGetAdminBadgesQuery,
+	useDeleteBadgeMutation,
+} from '@/app/store/api/adminApi'
 import { Button } from '@/components/ui/button'
-import { Plus, ArrowLeft, Edit, Trash2, MoreVertical, Tag } from 'lucide-react'
+import { Plus, Edit, Trash2, MoreVertical, Tag } from 'lucide-react'
 import Loader from '@/app/components/Loader/Loader'
+import AdminHeader from '@/app/components/admin/shared/AdminHeader'
 
 export default function AdminBadgesPage() {
 	const router = useRouter()
@@ -22,19 +26,9 @@ export default function AdminBadgesPage() {
 
 	return (
 		<div className='min-h-screen bg-background pb-24'>
-			{/* Header */}
-			<div className='sticky top-0 bg-background/80 backdrop-blur-xl z-40 border-b border-white/5'>
-				<div className='container mx-auto px-4 py-4 flex items-center justify-between'>
-					<div className='flex items-center gap-3'>
-						<Button
-							onClick={() => router.push('/admin')}
-							variant='ghost'
-							size='icon'
-						>
-							<ArrowLeft className='w-5 h-5' />
-						</Button>
-						<h1 className='text-2xl font-bold text-foreground'>Бейджи</h1>
-					</div>
+			<AdminHeader
+				title='Бейджи'
+				actions={
 					<Button
 						onClick={() => router.push('/admin/badges/create')}
 						className='bg-primary hover:bg-primary-hover'
@@ -43,8 +37,8 @@ export default function AdminBadgesPage() {
 						<Plus className='w-4 h-4 mr-2' />
 						Добавить
 					</Button>
-				</div>
-			</div>
+				}
+			/>
 
 			{/* Content */}
 			<div className='container mx-auto px-4 py-6'>
@@ -76,7 +70,9 @@ export default function AdminBadgesPage() {
 										<span>Цвет: {badge.color}</span>
 										<span>Текст: {badge.text_color}</span>
 										{!badge.is_active && (
-											<span className='text-destructive text-xs'>Неактивен</span>
+											<span className='text-destructive text-xs'>
+												Неактивен
+											</span>
 										)}
 									</div>
 								</div>
@@ -84,7 +80,9 @@ export default function AdminBadgesPage() {
 								{/* Actions */}
 								<div className='relative'>
 									<Button
-										onClick={() => setActiveMenu(activeMenu === badge.id ? null : badge.id)}
+										onClick={() =>
+											setActiveMenu(activeMenu === badge.id ? null : badge.id)
+										}
 										variant='ghost'
 										size='icon'
 										className='w-8 h-8'
@@ -133,4 +131,3 @@ export default function AdminBadgesPage() {
 		</div>
 	)
 }
-

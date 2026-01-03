@@ -7,9 +7,10 @@ import {
 	useDeleteCategoryMutation,
 } from '@/app/store/api/adminApi'
 import { Button } from '@/components/ui/button'
-import { Plus, ArrowLeft, Edit, Trash2, MoreVertical } from 'lucide-react'
+import { Plus, Edit, Trash2, MoreVertical } from 'lucide-react'
 import Loader from '@/app/components/Loader/Loader'
 import Image from 'next/image'
+import AdminHeader from '@/app/components/admin/shared/AdminHeader'
 
 const getImageUrl = (imagePath: string | null) => {
 	if (!imagePath) return '/placeholder.png'
@@ -34,19 +35,9 @@ export default function AdminCategoriesPage() {
 
 	return (
 		<div className='min-h-screen bg-background pb-24'>
-			{/* Header */}
-			<div className='sticky top-0 bg-background/80 backdrop-blur-xl z-40 border-b border-white/5'>
-				<div className='container mx-auto px-4 py-4 flex items-center justify-between'>
-					<div className='flex items-center gap-3'>
-						<Button
-							onClick={() => router.push('/admin')}
-							variant='ghost'
-							size='icon'
-						>
-							<ArrowLeft className='w-5 h-5' />
-						</Button>
-						<h1 className='text-2xl font-bold text-foreground'>Категории</h1>
-					</div>
+			<AdminHeader
+				title='Категории'
+				actions={
 					<Button
 						onClick={() => router.push('/admin/categories/create')}
 						className='bg-primary hover:bg-primary-hover'
@@ -55,8 +46,8 @@ export default function AdminCategoriesPage() {
 						<Plus className='w-4 h-4 mr-2' />
 						Добавить
 					</Button>
-				</div>
-			</div>
+				}
+			/>
 
 			{/* Content */}
 			<div className='container mx-auto px-4 py-6'>

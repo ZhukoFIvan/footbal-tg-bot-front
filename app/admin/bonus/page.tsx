@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import {
 	useGetAdminBonusUsersQuery,
 	useGetAdminBonusTransactionsQuery,
@@ -10,8 +9,9 @@ import {
 	useSetBalanceMutation,
 } from '@/app/store/api/adminApi'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Plus, Minus, Edit, Search } from 'lucide-react'
+import { Plus, Minus, Edit, Search } from 'lucide-react'
 import Loader from '@/app/components/Loader/Loader'
+import AdminHeader from '@/app/components/admin/shared/AdminHeader'
 import { BonusForm } from '@/app/components/admin/forms/BonusForm'
 import {
 	BonusAddInput,
@@ -20,7 +20,6 @@ import {
 } from '@/app/components/admin/forms/schemas/validationSchemas'
 
 export default function AdminBonusPage() {
-	const router = useRouter()
 	const [activeTab, setActiveTab] = useState<'users' | 'transactions'>('users')
 	const [search, setSearch] = useState('')
 
@@ -88,23 +87,11 @@ export default function AdminBonusPage() {
 
 	return (
 		<div className='min-h-screen bg-background pb-24'>
-			{/* Header */}
-			<div className='sticky top-0 bg-background/80 backdrop-blur-xl z-40 border-b border-white/5'>
-				<div className='container mx-auto px-4 py-4'>
-					<div className='flex items-center justify-between mb-4'>
-						<div className='flex items-center gap-3'>
-							<Button
-								onClick={() => router.push('/admin')}
-								variant='ghost'
-								size='icon'
-							>
-								<ArrowLeft className='w-5 h-5' />
-							</Button>
-							<h1 className='text-2xl font-bold text-foreground'>Бонусы</h1>
-						</div>
-					</div>
+			<AdminHeader title='Бонусы' />
 
-					{/* Tabs */}
+			{/* Tabs */}
+			<div className='sticky top-[73px] bg-background/80 backdrop-blur-xl z-30 border-b border-white/5'>
+				<div className='container mx-auto px-4 py-4'>
 					<div className='flex gap-2'>
 						<button
 							onClick={() => setActiveTab('users')}

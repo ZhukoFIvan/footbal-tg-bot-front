@@ -886,7 +886,6 @@ export default function AdminStatsPage() {
 										key={user.id}
 										className='bg-background/50 rounded-xl p-4 flex items-center gap-4'
 									>
-									
 										<div className='flex-1'>
 											<div className='text-foreground font-semibold'>
 												{user.first_name || 'Без имени'}

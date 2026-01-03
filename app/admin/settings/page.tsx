@@ -7,13 +7,10 @@ import {
 import Loader from '@/app/components/Loader/Loader'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
-import { ArrowLeft } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
+import AdminHeader from '@/app/components/admin/shared/AdminHeader'
 
 export default function AdminSettingsPage() {
 	const { data: settings, isLoading, error } = useGetAdminSiteSettingsQuery()
-	const router = useRouter()
 	const [updateSettings, { isLoading: isUpdating }] =
 		useUpdateSiteSettingsMutation()
 
@@ -49,21 +46,7 @@ export default function AdminSettingsPage() {
 
 	return (
 		<div className='min-h-screen bg-background pb-24'>
-			{/* Header */}
-			<div className='sticky top-0 bg-background/80 backdrop-blur-xl z-40 border-b border-white/5'>
-				<div className=' flex items-center gap-3 container mx-auto px-4 py-4'>
-					<Button
-						onClick={() => router.push('/admin')}
-						variant='ghost'
-						size='icon'
-					>
-						<ArrowLeft className='w-5 h-5' />
-					</Button>
-					<h1 className='text-2xl font-bold text-foreground'>
-						Настройки сайта
-					</h1>
-				</div>
-			</div>
+			<AdminHeader title='Настройки сайта' />
 
 			{/* Content */}
 			<div className='container mx-auto px-4 py-6 max-w-2xl'>

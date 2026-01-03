@@ -8,6 +8,8 @@ import {
 } from '@/app/store/api/promoCodesApi'
 import { PromoCodeForm } from '@/app/components/admin/forms/PromoCodeForm'
 import { Button } from '@/components/ui/button'
+import AdminHeader from '@/app/components/admin/shared/AdminHeader'
+import Loader from '@/app/components/Loader/Loader'
 
 export default function EditPromoCodePage({
 	params,
@@ -40,9 +42,10 @@ export default function EditPromoCodePage({
 
 	if (loadingPromo) {
 		return (
-			<div className='min-h-screen bg-background p-6'>
-				<div className='max-w-2xl mx-auto'>
-					<p className='text-foreground/70'>Загрузка...</p>
+			<div className='min-h-screen bg-background pb-24'>
+				<AdminHeader title='Редактировать промокод' />
+				<div className='container mx-auto px-4 py-6'>
+					<Loader />
 				</div>
 			</div>
 		)
@@ -50,51 +53,39 @@ export default function EditPromoCodePage({
 
 	if (!promoCode) {
 		return (
-			<div className='min-h-screen bg-background p-6'>
-				<div className='max-w-2xl mx-auto'>
-					<p className='text-destructive'>Промокод не найден</p>
-					<Button
-						onClick={() => router.push('/admin/promo-codes')}
-						className='mt-4'
-					>
-						← Назад к списку
-					</Button>
+			<div className='min-h-screen bg-background pb-24'>
+				<AdminHeader title='Редактировать промокод' />
+				<div className='container mx-auto px-4 py-6'>
+					<div className='max-w-2xl mx-auto'>
+						<p className='text-destructive mb-4'>Промокод не найден</p>
+						<Button onClick={() => router.push('/admin/promo-codes')}>
+							← Назад к списку
+						</Button>
+					</div>
 				</div>
 			</div>
 		)
 	}
 
 	return (
-		<div className='min-h-screen bg-background p-6'>
-			<div className='max-w-2xl mx-auto'>
-				<div className='flex justify-between items-center mb-6'>
-					<div>
-						<h1 className='text-3xl font-bold text-foreground mb-1'>
-							Редактировать промокод
-						</h1>
-						<p className='text-foreground/70'>
-							Использований: {promoCode.usage_count}
-							{promoCode.usage_limit ? ` / ${promoCode.usage_limit}` : ''}
-						</p>
-					</div>
-					<Button
-						onClick={() => router.push('/admin/promo-codes')}
-						variant='outline'
-						className='border-white/10'
-					>
-						← Назад
-					</Button>
-				</div>
+		<div className='min-h-screen bg-background pb-24'>
+			<AdminHeader title='Редактировать промокод' />
+			<div className='container mx-auto px-4 py-6'>
+				<div className='max-w-2xl mx-auto'>
+					<p className='text-foreground/70 mb-6'>
+						Использований: {promoCode.usage_count}
+						{promoCode.usage_limit ? ` / ${promoCode.usage_limit}` : ' / ∞'}
+					</p>
 
-				<div className='bg-element-bg rounded-2xl p-6'>
-					<PromoCodeForm
-						initialData={promoCode}
-						onSubmit={handleSubmit}
-						isLoading={updating}
-					/>
+					<div className='bg-element-bg rounded-2xl p-6'>
+						<PromoCodeForm
+							initialData={promoCode}
+							onSubmit={handleSubmit}
+							isLoading={updating}
+						/>
+					</div>
 				</div>
 			</div>
 		</div>
 	)
 }
-
