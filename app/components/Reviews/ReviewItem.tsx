@@ -64,6 +64,18 @@ export const ReviewItem: React.FC<ReviewItemProps> = ({
 								{timeAgo}
 								{isEdited && ' (изменено)'}
 							</span>
+							{/* Статус модерации (только для собственных неодобренных отзывов) */}
+							{review.status && (
+								<span
+									className={`text-xs px-2 py-0.5 rounded-full ${
+										review.status === 'pending'
+											? 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400'
+											: 'bg-red-500/20 text-red-600 dark:text-red-400'
+									}`}
+								>
+									{review.status === 'pending' ? 'На модерации' : 'Отклонен'}
+								</span>
+							)}
 						</div>
 
 						{/* Комментарий */}

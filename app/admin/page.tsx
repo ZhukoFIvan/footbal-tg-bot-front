@@ -17,6 +17,7 @@ import {
 	BarChart3,
 	Settings,
 	Ticket,
+	Star,
 } from 'lucide-react'
 
 export default function AdminPage() {
@@ -88,6 +89,13 @@ export default function AdminPage() {
 			icon: Ticket,
 			href: '/admin/promo-codes',
 			color: 'bg-red-500/20 text-red-500',
+		},
+		{
+			title: 'Отзывы',
+			description: 'Модерация отзывов пользователей',
+			icon: Star,
+			href: '/admin/reviews',
+			color: 'bg-amber-500/20 text-amber-500',
 		},
 		{
 			title: 'Бонусы',
