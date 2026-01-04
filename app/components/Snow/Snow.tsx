@@ -3,29 +3,28 @@
 import { useEffect, useState } from 'react'
 import './snow.css'
 
+const SNOWFLAKE_COUNT = 30
+
+const generateSnowflakes = () =>
+	Array.from({ length: SNOWFLAKE_COUNT }, (_, i) => ({
+		id: i,
+		animationDelay: Math.random() * 20,
+		animationDuration: 10 + Math.random() * 20,
+		left: Math.random() * 100,
+		fontSize: 0.5 + Math.random() * 1,
+		opacity: 0.3 + Math.random() * 0.6,
+	}))
+
 export default function Snow() {
 	const [mounted, setMounted] = useState(false)
+	// Создаем снежинки только один раз при монтировании
+	const [snowflakes] = useState(generateSnowflakes)
 
 	useEffect(() => {
 		setMounted(true)
 	}, [])
 
 	if (!mounted) return null
-
-	// Создаем 50 снежинок
-	const snowflakes = Array.from({ length: 50 }, (_, i) => ({
-		id: i,
-		// Случайная задержка анимации (0-20 секунд)
-		animationDelay: Math.random() * 20,
-		// Случайная длительность падения (10-30 секунд)
-		animationDuration: 10 + Math.random() * 20,
-		// Случайная позиция по горизонтали
-		left: Math.random() * 100,
-		// Случайный размер (0.5-1.5em)
-		fontSize: 0.5 + Math.random() * 1,
-		// Случайная прозрачность (0.3-0.9)
-		opacity: 0.3 + Math.random() * 0.6,
-	}))
 
 	return (
 		<div className='snow-container'>
@@ -40,9 +39,7 @@ export default function Snow() {
 						fontSize: `${flake.fontSize}em`,
 						opacity: flake.opacity,
 					}}
-				>
-					❄
-				</div>
+				/>
 			))}
 		</div>
 	)

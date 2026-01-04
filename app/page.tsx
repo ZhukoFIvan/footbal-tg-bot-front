@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import SectionsList from './components/Sections/SectionsList'
 import CategoriesList from './components/Categories/CategoriesList'
 import MainScreenCategories from './components/MainScreenCategories/MainScreenCategories'

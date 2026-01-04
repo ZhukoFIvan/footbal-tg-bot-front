@@ -187,3 +187,46 @@ body {
     display: none;
   }
 }
+
+/* Liquid Glass Animations */
+@keyframes liquidFlow {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes liquidBorder {
+  0%, 100% {
+    background-position: 0% 50%;
+    opacity: 0.6;
+  }
+  50% {
+    background-position: 100% 50%;
+    opacity: 1;
+  }
+}
+
+@keyframes ripple {
+  0%, 100% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.6;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(33, 188, 96, 0.4))
+            drop-shadow(0 0 16px rgba(33, 188, 96, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgba(33, 188, 96, 0.6))
+            drop-shadow(0 0 20px rgba(33, 188, 96, 0.7));
+  }
+}
