@@ -3,6 +3,16 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
+const isNoonyashop = process.env.NEXT_PUBLIC_IS_NOONYASHOP === 'true'
+const storeName = isNoonyashop ? 'NOONYASHOP' : 'ROMIXSTORE'
+const workingHours = isNoonyashop ? 'с 7:00 до 23:59' : 'с 10:00 до 23:59'
+const supportLink = isNoonyashop
+	? 'https://t.me/noonyashop_support'
+	: 'https://t.me/romixstore_support'
+const supportHandle = isNoonyashop
+	? '@noonyashop_support'
+	: '@romixstore_support'
+
 export default function UserAgreement() {
 	const router = useRouter()
 	return (
@@ -35,7 +45,7 @@ export default function UserAgreement() {
 						<p className='text-foreground/90 leading-relaxed'>
 							<span className='font-semibold text-primary'>2.</span> Время
 							выполнения заказа составляет от 5 до 15 минут в рабочее время
-							магазина с 10:00 до 23:59 по московскому времени. В отдельных
+							магазина {workingHours} по московскому времени. В отдельных
 							случаях время выполнения может быть увеличено по техническим
 							причинам магазина или игры.
 						</p>
@@ -70,7 +80,7 @@ export default function UserAgreement() {
 						</p>
 
 						<p className='text-foreground/90 leading-relaxed'>
-							<span className='font-semibold text-primary'>7.</span> ROMIX STORE
+							<span className='font-semibold text-primary'>7.</span> {storeName}{' '}
 							не является разработчиком игры и не связан с EA Sports. Все
 							товарные знаки принадлежат их правообладателям. Мы предоставляем
 							сервис по пополнению внутриигровых ресурсов.
@@ -91,7 +101,7 @@ export default function UserAgreement() {
 
 						<p className='text-foreground/90 leading-relaxed'>
 							<span className='font-semibold text-primary'>9.</span> Оформляя
-							заказ в ROMIX STORE, вы подтверждаете, что ознакомлены и полностью
+							заказ в {storeName}, вы подтверждаете, что ознакомлены и полностью
 							согласны с данным пользовательским соглашением.
 						</p>
 
@@ -99,12 +109,12 @@ export default function UserAgreement() {
 							<span className='font-semibold text-primary'>10.</span>{' '}
 							Официальная поддержка магазина:{' '}
 							<a
-								href='https://t.me/romixstore_support'
+								href={supportLink}
 								target='_blank'
 								rel='noopener noreferrer'
 								className='text-primary hover:text-primary-hover underline'
 							>
-								@romixstore_support
+								{supportHandle}
 							</a>
 						</p>
 					</div>
@@ -119,7 +129,7 @@ export default function UserAgreement() {
 						</h2>
 
 						<p className='text-foreground/90 leading-relaxed'>
-							<span className='font-semibold text-primary'>1.</span> ROMIX STORE
+							<span className='font-semibold text-primary'>1.</span> {storeName}{' '}
 							уважает конфиденциальность пользователей и гарантирует, что
 							полученные от вас данные не передаются третьим лицам и не
 							продаются. Мы не храним лишние персональные данные и используем
@@ -150,7 +160,7 @@ export default function UserAgreement() {
 
 						<p className='text-foreground/90 leading-relaxed'>
 							<span className='font-semibold text-primary'>4.</span> Используя
-							сервис ROMIX STORE, вы подтверждаете согласие с настоящей
+							сервис {storeName}, вы подтверждаете согласие с настоящей
 							политикой конфиденциальности.
 						</p>
 					</div>

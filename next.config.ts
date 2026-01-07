@@ -1,5 +1,7 @@
 import type { NextConfig } from 'next'
 
+const isNoonyashop = process.env.NEXT_PUBLIC_IS_NOONYASHOP === 'true'
+
 const nextConfig: NextConfig = {
 	images: {
 		remotePatterns: [
@@ -11,7 +13,7 @@ const nextConfig: NextConfig = {
 			},
 			{
 				protocol: 'https',
-				hostname: 'noonyashop.ru',
+				hostname: isNoonyashop ? 'noonyashop.ru' : 'romixstore.ru',
 				pathname: '/uploads/**',
 			},
 		],

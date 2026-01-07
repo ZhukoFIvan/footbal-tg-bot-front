@@ -16,7 +16,8 @@ export default function CreateCategoryPage() {
 
 	const handleSubmit = async (
 		data: CategoryCreateInput | CategoryUpdateInput,
-		images: { main?: File; additional?: File }
+		images: { main?: File; additional?: File },
+		_deletedImages?: { main?: boolean; additional?: boolean }
 	) => {
 		try {
 			// 1. Создаем категорию

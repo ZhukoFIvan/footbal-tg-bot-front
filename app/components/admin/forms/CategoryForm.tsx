@@ -22,7 +22,8 @@ interface CategoryFormProps {
 	defaultValues?: Partial<CategoryCreateInput | CategoryUpdateInput>
 	onSubmit: (
 		data: CategoryCreateInput | CategoryUpdateInput,
-		images: { main?: File; additional?: File }
+		images: { main?: File; additional?: File },
+		deletedImages?: { main?: boolean; additional?: boolean }
 	) => void | Promise<void>
 	isSubmitting?: boolean
 	existingMainImage?: string | null
@@ -56,14 +57,33 @@ export function CategoryForm({
 
 	const [mainImage, setMainImage] = useState<File | null>(null)
 	const [additionalImage, setAdditionalImage] = useState<File | null>(null)
+	const [deletedMainImage, setDeletedMainImage] = useState(false)
+	const [deletedAdditionalImage, setDeletedAdditionalImage] = useState(false)
+
+	const handleDeleteMainImage = () => {
+		setDeletedMainImage(true)
+		setMainImage(null)
+	}
+
+	const handleDeleteAdditionalImage = () => {
+		setDeletedAdditionalImage(true)
+		setAdditionalImage(null)
+	}
 
 	const handleSubmit = async (
 		data: CategoryCreateInput | CategoryUpdateInput
 	) => {
-		await onSubmit(data, {
-			main: mainImage || undefined,
-			additional: additionalImage || undefined,
-		})
+		await onSubmit(
+			data,
+			{
+				main: mainImage || undefined,
+				additional: additionalImage || undefined,
+			},
+			{
+				main: deletedMainImage,
+				additional: deletedAdditionalImage,
+			}
+		)
 	}
 
 	return (
@@ -75,19 +95,29 @@ export function CategoryForm({
 						label='Главное изображение'
 						aspectRatio='square'
 						value={mainImage}
-						onChange={(file: File | File[] | null) =>
+						onChange={(file: File | File[] | null) => {
 							setMainImage(file as File | null)
-						}
-						previewUrls={existingMainImage}
+							// Если выбрано новое изображение, сбрасываем флаг удаления
+							if (file) {
+								setDeletedMainImage(false)
+							}
+						}}
+						previewUrls={deletedMainImage ? null : existingMainImage}
+						onDeleteExisting={handleDeleteMainImage}
 					/>
 					<ImageUpload
 						label='Дополнительное изображение'
 						aspectRatio='square'
 						value={additionalImage}
-						onChange={(file: File | File[] | null) =>
+						onChange={(file: File | File[] | null) => {
 							setAdditionalImage(file as File | null)
-						}
-						previewUrls={existingAdditionalImage}
+							// Если выбрано новое изображение, сбрасываем флаг удаления
+							if (file) {
+								setDeletedAdditionalImage(false)
+							}
+						}}
+						previewUrls={deletedAdditionalImage ? null : existingAdditionalImage}
+						onDeleteExisting={handleDeleteAdditionalImage}
 					/>
 				</div>
 
