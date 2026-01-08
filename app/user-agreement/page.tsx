@@ -4,7 +4,7 @@ import { ArrowLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 const isNoonyashop = process.env.NEXT_PUBLIC_IS_NOONYASHOP === 'true'
-const storeName = isNoonyashop ? 'NOONYASHOP' : 'ROMIXSTORE'
+const storeName = isNoonyashop ? 'NOONYA SHOP' : 'ROMIXSTORE'
 const workingHours = isNoonyashop ? 'с 7:00 до 23:59' : 'с 10:00 до 23:59'
 const supportLink = isNoonyashop
 	? 'https://t.me/noonyashop_support'

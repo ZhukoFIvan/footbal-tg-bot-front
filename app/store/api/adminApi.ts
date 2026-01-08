@@ -40,6 +40,7 @@ interface AdminProduct {
 	currency: string
 	stock_count: number
 	is_active: boolean
+	is_priority: boolean
 	created_at: string
 	updated_at: string
 }

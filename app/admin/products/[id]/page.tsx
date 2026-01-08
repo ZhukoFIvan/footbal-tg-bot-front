@@ -196,6 +196,7 @@ export default function EditProductPage({
 						section_id: product.section_id,
 						badge_id: product.badge?.id || null,
 						is_active: product.is_active,
+						is_priority: product.is_priority || false,
 					}}
 					onSubmit={handleSubmit}
 					isSubmitting={updating || uploading}

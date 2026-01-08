@@ -48,10 +48,6 @@
   --radius-4xl: calc(var(--radius) + 16px);
 }
 
-body {
-  font-family: var(--font-sf-pro), system-ui, sans-serif;
-}
-
 /* Светлая тема (по умолчанию) */
 :root {
   --radius: 0.625rem;
@@ -173,7 +169,10 @@ body {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+  html {
+    font-family: var(--font-sf-pro), -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
   }
 }
 

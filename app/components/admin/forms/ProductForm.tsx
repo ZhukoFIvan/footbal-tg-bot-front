@@ -78,6 +78,7 @@ export function ProductForm({
 			section_id: undefined,
 			badge_id: undefined,
 			is_active: true,
+			is_priority: false,
 			...defaultValues,
 		},
 	})
@@ -223,6 +224,14 @@ export function ProductForm({
 
 				{/* Active */}
 				<FormCheckbox control={form.control} name='is_active' label='Активен' />
+
+			{/* Priority */}
+			<FormCheckbox
+				control={form.control}
+				name='is_priority'
+				label='Приоритетный товар'
+				description='Будет отображаться первым во всех списках'
+			/>
 
 				{/* Submit Button */}
 				<Button

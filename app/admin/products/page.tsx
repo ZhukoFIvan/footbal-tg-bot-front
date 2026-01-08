@@ -52,6 +52,14 @@ export default function AdminProductsPage() {
 	const [activeMenu, setActiveMenu] = useState<number | null>(null)
 	const menuRef = useRef<HTMLDivElement>(null)
 
+	// Сортировка товаров: приоритетные первыми
+	const sortedProducts =
+		products?.slice().sort((a, b) => {
+			if (a.is_priority && !b.is_priority) return -1
+			if (!a.is_priority && b.is_priority) return 1
+			return 0
+		}) || []
+
 	// Закрываем меню при клике вне его
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -100,9 +108,9 @@ export default function AdminProductsPage() {
 			<div className='container mx-auto px-4 py-6'>
 				{isLoading ? (
 					<Loader />
-				) : products && products.length > 0 ? (
+				) : sortedProducts && sortedProducts.length > 0 ? (
 					<div className='space-y-3'>
-						{products.map((product) => (
+						{sortedProducts.map((product) => (
 							<div
 								key={product.id}
 								className='bg-element-bg rounded-2xl p-4 flex gap-4'
@@ -121,9 +129,14 @@ export default function AdminProductsPage() {
 
 								{/* Info */}
 								<div className='flex-1 min-w-0'>
-									<h3 className='text-foreground font-medium line-clamp-1 mb-1'>
-										{product.title}
-									</h3>
+									<div className='flex items-center gap-2 mb-1'>
+										<h3 className='text-foreground font-medium line-clamp-1'>
+											{product.title}
+										</h3>
+										{product.is_priority && (
+											<span className='text-yellow-500 text-sm'>★</span>
+										)}
+									</div>
 									<div className='flex items-center gap-3 text-sm'>
 										<span className='text-primary font-semibold'>
 											{rub(product.price)}

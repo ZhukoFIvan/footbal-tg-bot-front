@@ -45,6 +45,14 @@ function CatalogContent() {
 
 	const { data: products, isLoading, error } = useGetProductsQuery(queryParams)
 
+	// Сортировка товаров: приоритетные первыми
+	const sortedProducts =
+		products?.slice().sort((a, b) => {
+			if (a.is_priority && !b.is_priority) return -1
+			if (!a.is_priority && b.is_priority) return 1
+			return 0
+		}) || []
+
 	const handleCategoryChange = (categoryId: number | null) => {
 		setSelectedCategoryId(categoryId)
 	}
@@ -93,15 +101,15 @@ function CatalogContent() {
 					</div>
 				)}
 
-				{!isLoading && !error && products && products.length === 0 && (
+				{!isLoading && !error && sortedProducts && sortedProducts.length === 0 && (
 					<div className='flex items-center justify-center py-12'>
 						<p className='text-muted-foreground text-lg'>Товары не найдены</p>
 					</div>
 				)}
 
-				{!isLoading && !error && products && products.length > 0 && (
+				{!isLoading && !error && sortedProducts && sortedProducts.length > 0 && (
 					<div className='grid grid-cols-2 gap-4'>
-						{products.map((product) => (
+						{sortedProducts.map((product) => (
 							<ProductCard
 								key={product.id}
 								product={product}
