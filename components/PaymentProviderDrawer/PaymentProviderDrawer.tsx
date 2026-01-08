@@ -70,7 +70,9 @@ export function PaymentProviderDrawer({
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-foreground">
-              Выберите способ оплаты
+              {!selectedMethod
+                ? "Выберите способ оплаты"
+                : "Выберите платежную систему"}
             </h2>
             <button
               onClick={handleClose}
@@ -81,18 +83,18 @@ export function PaymentProviderDrawer({
             </button>
           </div>
 
-          {/* Payment Providers */}
+          {/* Payment Methods - Показываем сначала */}
           <div className="space-y-4 mb-6">
             <div className="text-sm text-foreground/70 font-medium mb-3">
-              Платежная система
+              Способ оплаты
             </div>
 
-            {/* FreeKassa */}
+            {/* Card */}
             <button
-              onClick={() => setSelectedProvider("freekassa")}
+              onClick={() => setSelectedMethod("card")}
               disabled={isLoading}
               className={`w-full p-4 rounded-2xl border-2 transition-all disabled:opacity-50 ${
-                selectedProvider === "freekassa"
+                selectedMethod === "card"
                   ? "border-primary bg-primary/10"
                   : "border-white/10 bg-background hover:border-white/20"
               }`}
@@ -100,18 +102,18 @@ export function PaymentProviderDrawer({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
-                    <span className="text-lg font-bold text-primary">FK</span>
+                    <CreditCard className="w-6 h-6 text-primary" />
                   </div>
                   <div className="text-left">
                     <div className="font-semibold text-foreground">
-                      FreeKassa
+                      Банковская карта
                     </div>
                     <div className="text-sm text-foreground/60">
-                      Популярная система
+                      Visa, Mastercard, МИР
                     </div>
                   </div>
                 </div>
-                {selectedProvider === "freekassa" && (
+                {selectedMethod === "card" && (
                   <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
                     <div className="w-2 h-2 rounded-full bg-white" />
                   </div>
@@ -119,12 +121,12 @@ export function PaymentProviderDrawer({
               </div>
             </button>
 
-            {/* Paypalych */}
+            {/* SBP */}
             <button
-              onClick={() => setSelectedProvider("paypalych")}
+              onClick={() => setSelectedMethod("sbp")}
               disabled={isLoading}
               className={`w-full p-4 rounded-2xl border-2 transition-all disabled:opacity-50 ${
-                selectedProvider === "paypalych"
+                selectedMethod === "sbp"
                   ? "border-primary bg-primary/10"
                   : "border-white/10 bg-background hover:border-white/20"
               }`}
@@ -132,18 +134,18 @@ export function PaymentProviderDrawer({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
-                    <span className="text-lg font-bold text-primary">PP</span>
+                    <Smartphone className="w-6 h-6 text-primary" />
                   </div>
                   <div className="text-left">
                     <div className="font-semibold text-foreground">
-                      Paypalych
+                      СБП / QR-код
                     </div>
                     <div className="text-sm text-foreground/60">
-                      Быстрая оплата
+                      Оплата через банк
                     </div>
                   </div>
                 </div>
-                {selectedProvider === "paypalych" && (
+                {selectedMethod === "sbp" && (
                   <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
                     <div className="w-2 h-2 rounded-full bg-white" />
                   </div>
@@ -152,19 +154,19 @@ export function PaymentProviderDrawer({
             </button>
           </div>
 
-          {/* Payment Methods */}
-          {selectedProvider && (
+          {/* Payment Providers - Показываем после выбора способа */}
+          {selectedMethod && (
             <div className="space-y-4 mb-6">
               <div className="text-sm text-foreground/70 font-medium mb-3">
-                Метод оплаты
+                Платежная система
               </div>
 
-              {/* Card */}
+              {/* FreeKassa */}
               <button
-                onClick={() => setSelectedMethod("card")}
+                onClick={() => setSelectedProvider("freekassa")}
                 disabled={isLoading}
                 className={`w-full p-4 rounded-2xl border-2 transition-all disabled:opacity-50 ${
-                  selectedMethod === "card"
+                  selectedProvider === "freekassa"
                     ? "border-primary bg-primary/10"
                     : "border-white/10 bg-background hover:border-white/20"
                 }`}
@@ -172,18 +174,18 @@ export function PaymentProviderDrawer({
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
-                      <CreditCard className="w-6 h-6 text-primary" />
+                      <span className="text-lg font-bold text-primary">FK</span>
                     </div>
                     <div className="text-left">
                       <div className="font-semibold text-foreground">
-                        Банковская карта
+                        FreeKassa
                       </div>
                       <div className="text-sm text-foreground/60">
-                        Visa, Mastercard, МИР
+                        Популярная система
                       </div>
                     </div>
                   </div>
-                  {selectedMethod === "card" && (
+                  {selectedProvider === "freekassa" && (
                     <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
                       <div className="w-2 h-2 rounded-full bg-white" />
                     </div>
@@ -191,12 +193,12 @@ export function PaymentProviderDrawer({
                 </div>
               </button>
 
-              {/* SBP */}
+              {/* Paypalych */}
               <button
-                onClick={() => setSelectedMethod("sbp")}
+                onClick={() => setSelectedProvider("paypalych")}
                 disabled={isLoading}
                 className={`w-full p-4 rounded-2xl border-2 transition-all disabled:opacity-50 ${
-                  selectedMethod === "sbp"
+                  selectedProvider === "paypalych"
                     ? "border-primary bg-primary/10"
                     : "border-white/10 bg-background hover:border-white/20"
                 }`}
@@ -204,18 +206,18 @@ export function PaymentProviderDrawer({
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
-                      <Smartphone className="w-6 h-6 text-primary" />
+                      <span className="text-lg font-bold text-primary">PP</span>
                     </div>
                     <div className="text-left">
                       <div className="font-semibold text-foreground">
-                        СБП / QR-код
+                        Paypalych
                       </div>
                       <div className="text-sm text-foreground/60">
-                        Оплата через банк
+                        Быстрая оплата
                       </div>
                     </div>
                   </div>
-                  {selectedMethod === "sbp" && (
+                  {selectedProvider === "paypalych" && (
                     <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
                       <div className="w-2 h-2 rounded-full bg-white" />
                     </div>
@@ -238,4 +240,3 @@ export function PaymentProviderDrawer({
     </>
   );
 }
-
