@@ -169,6 +169,7 @@ export const productCreateSchema = z.object({
 		.optional()
 		.default(0),
 	is_active: z.boolean().optional().default(true),
+	is_priority: z.boolean().optional().default(false),
 })
 
 export const productUpdateSchema = z.object({
@@ -228,6 +229,7 @@ export const productUpdateSchema = z.object({
 		.nonnegative('Количество на складе должно быть >= 0')
 		.optional(),
 	is_active: z.boolean().optional(),
+	is_priority: z.boolean().optional(),
 })
 
 // Бейджи (Badges)

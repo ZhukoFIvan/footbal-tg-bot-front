@@ -22,6 +22,7 @@ export interface Product {
 	currency: string
 	stock_count: number
 	is_active: boolean
+	is_priority: boolean
 	badge: Badge | null // Один бейдж, может быть null
 }
 

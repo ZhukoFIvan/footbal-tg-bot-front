@@ -21,7 +21,15 @@ export default function MainScreenCategories() {
 
 	return (
 		<div className='space-y-8'>
-			{categories.map(({ category, products, total_products }) => (
+			{categories.map(({ category, products, total_products }) => {
+				// Сортировка товаров: приоритетные первыми
+				const sortedProducts = [...products].sort((a, b) => {
+					if (a.is_priority && !b.is_priority) return -1
+					if (!a.is_priority && b.is_priority) return 1
+					return 0
+				})
+
+				return (
 				<div key={category.id}>
 					<div className='flex items-center justify-between mb-4 px-4'>
 						<div className='flex items-center gap-2'>
@@ -41,7 +49,7 @@ export default function MainScreenCategories() {
 						</button>
 					</div>
 
-					{products.length > 0 ? (
+					{sortedProducts.length > 0 ? (
 						<div
 							className='overflow-x-auto scrollbar-hide touch-pan-x'
 							style={{
@@ -50,7 +58,7 @@ export default function MainScreenCategories() {
 							}}
 						>
 							<div className='flex gap-3 px-4 pb-2'>
-								{products.map((product) => (
+								{sortedProducts.map((product) => (
 									<div key={product.id} className='flex-shrink-0 w-[160px]'>
 										<ProductCard product={product} />
 									</div>
@@ -63,7 +71,8 @@ export default function MainScreenCategories() {
 						</p>
 					)}
 				</div>
-			))}
+				)
+			})}
 		</div>
 	)
 }

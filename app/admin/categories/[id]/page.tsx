@@ -36,7 +36,8 @@ export default function EditCategoryPage({
 
 	const handleSubmit = async (
 		data: CategoryUpdateInput,
-		images: { main?: File; additional?: File }
+		images: { main?: File; additional?: File },
+		deletedImages?: { main?: boolean; additional?: boolean }
 	) => {
 		try {
 			// 1. Обновляем данные категории
@@ -45,12 +46,26 @@ export default function EditCategoryPage({
 				data,
 			}).unwrap()
 
-			// 2. Загружаем главное изображение, если выбрано
+			// 2. Удаляем главное изображение, если пользователь его удалил и не загрузил новое
+			if (deletedImages?.main && !images.main) {
+				await fetch(
+					`${process.env.NEXT_PUBLIC_API_URL}/admin/categories/${categoryId}/main-image`,
+					{
+						method: 'DELETE',
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem('token')}`,
+						},
+					}
+				)
+			}
+
+			// 3. Загружаем главное изображение, если выбрано
+			// При POST на этот эндпоинт старая картинка автоматически заменяется на новую
 			if (images.main) {
 				const formData = new FormData()
 				formData.append('file', images.main)
 
-				await fetch(
+				const response = await fetch(
 					`${process.env.NEXT_PUBLIC_API_URL}/admin/categories/${categoryId}/main-image`,
 					{
 						method: 'POST',
@@ -60,14 +75,32 @@ export default function EditCategoryPage({
 						body: formData,
 					}
 				)
+
+				if (!response.ok) {
+					throw new Error('Failed to upload main image')
+				}
 			}
 
-			// 3. Загружаем дополнительное изображение, если выбрано
+			// 4. Удаляем дополнительное изображение, если пользователь его удалил и не загрузил новое
+			if (deletedImages?.additional && !images.additional) {
+				await fetch(
+					`${process.env.NEXT_PUBLIC_API_URL}/admin/categories/${categoryId}/additional-image`,
+					{
+						method: 'DELETE',
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem('token')}`,
+						},
+					}
+				)
+			}
+
+			// 5. Загружаем дополнительное изображение, если выбрано
+			// При POST на этот эндпоинт старая картинка автоматически заменяется на новую
 			if (images.additional) {
 				const formData = new FormData()
 				formData.append('file', images.additional)
 
-				await fetch(
+				const response = await fetch(
 					`${process.env.NEXT_PUBLIC_API_URL}/admin/categories/${categoryId}/additional-image`,
 					{
 						method: 'POST',
@@ -77,6 +110,10 @@ export default function EditCategoryPage({
 						body: formData,
 					}
 				)
+
+				if (!response.ok) {
+					throw new Error('Failed to upload additional image')
+				}
 			}
 
 			router.push('/admin/categories')

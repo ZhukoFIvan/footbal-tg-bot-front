@@ -14,11 +14,11 @@ interface CategoryProps {
 const getImageUrl = (imagePath: string | null) => {
 	if (!imagePath) return '/placeholder.png'
 	if (imagePath.startsWith('http')) return imagePath
-	
+
 	// Убираем /api из URL для uploads (картинки лежат на корне домена)
 	const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 	const baseUrl = apiUrl.replace('/api', '')
-	
+
 	// Добавляем слэш если его нет
 	const path = imagePath.startsWith('/') ? imagePath : `/${imagePath}`
 	return `${baseUrl}${path}`
@@ -53,7 +53,7 @@ export default function Category({
 					className='object-contain'
 				/>
 			</div>
-			<div className='absolute top-[-10px] left-[-10px] w-[50px] h-[50px] transform -rotate-12'>
+			<div className='absolute top-[-10px] left-[-10px] w-[50px] h-[50px] transform'>
 				<Image
 					src={getImageUrl(category.additional_image)}
 					alt=''
@@ -63,7 +63,7 @@ export default function Category({
 				/>
 			</div>
 
-			<div className='absolute bottom-[-10px] right-[-10px] w-[50px] h-[50px] transform -rotate-12'>
+			<div className='absolute bottom-[-10px] right-[-10px] w-[50px] h-[50px] transform rotate-180'>
 				<Image
 					src={getImageUrl(category.additional_image)}
 					alt=''
@@ -74,13 +74,13 @@ export default function Category({
 			</div>
 
 			{/* Центральное изображение и текст */}
-			<div className='absolute inset-0 flex flex-col items-center justify-center z-10'>
-				<div className='w-[40px] h-[40px] mb-2'>
+			<div className='absolute inset-0 flex flex-col items-center justify-center z-10 gap-2'>
+				<div className='w-[50px] h-[50px] flex items-center justify-center'>
 					<Image
 						src={getImageUrl(category.main_image)}
 						alt={category.title}
-						width={40}
-						height={40}
+						width={50}
+						height={50}
 						className={`object-contain transition-opacity duration-300 ${
 							imageLoaded ? 'opacity-100' : 'opacity-0'
 						}`}
@@ -91,9 +91,10 @@ export default function Category({
 				</div>
 
 				<h3
-					className={`text-white font-semibold text-xl text-center px-4 transition-opacity duration-300 ${
+					className={`text-white font-semibold text-xl text-center px-4 transition-opacity duration-300 font-sans ${
 						imageLoaded ? 'opacity-100' : 'opacity-0'
 					}`}
+					style={{ transform: 'scaleX(1.2)' }}
 				>
 					{category.title.toUpperCase()}
 				</h3>

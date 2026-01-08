@@ -179,7 +179,7 @@ export default function ProductDrawer({
 							<CarouselContent>
 								{images.map((img, idx) => (
 									<CarouselItem key={idx}>
-										<div className='relative aspect-square w-full overflow-hidden rounded-2xl bg-element-bg/60'>
+										<div className='relative aspect-square w-full overflow-hidden rounded-2xl'>
 											{/* Скелетон пока картинка загружается */}
 											{!loadedImages[idx] && (
 												<div className='absolute inset-0 bg-element-bg animate-pulse z-5' />
@@ -216,13 +216,13 @@ export default function ProductDrawer({
 											)}
 
 											{/* Image */}
-											<div className='flex h-full w-full items-center justify-center p-8'>
+											<div className='flex h-full w-full items-center justify-center'>
 												<Image
 													src={img}
 													alt={product.title}
-													width={300}
+													width={400}
 													height={300}
-													className={`object-contain transition-opacity duration-300 ${
+													className={`object-contain transition-opacity duration-300 rounded-2xl ${
 														loadedImages[idx] ? 'opacity-100' : 'opacity-0'
 													}`}
 													unoptimized

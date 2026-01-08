@@ -19,7 +19,7 @@ interface ImageUploadProps {
 	value?: File | File[] | string | string[] | null
 	onChange: (files: File | File[] | null) => void
 	previewUrls?: string | string[] | null
-	onDeleteExisting?: (index: number, url: string) => void
+	onDeleteExisting?: ((index: number, url: string) => void) | (() => void)
 	aspectRatio?: 'square' | 'video' | 'auto'
 	maxFiles?: number
 	error?: string
@@ -45,8 +45,12 @@ export function ImageUpload({
 	const getPreviews = useCallback((): { url: string; isExisting: boolean; originalIndex?: number }[] => {
 		const result: { url: string; isExisting: boolean; originalIndex?: number }[] = []
 
+		// Для одиночных изображений: если выбрано новое изображение, показываем только его
+		// Для множественных: показываем и старые, и новые
+		const showExisting = multiple || localPreviews.length === 0
+
 		// Добавляем существующие изображения (которые не удалены)
-		if (previewUrls) {
+		if (showExisting && previewUrls) {
 			const existingUrls = Array.isArray(previewUrls) ? previewUrls : [previewUrls]
 			existingUrls.forEach((url, index) => {
 				if (!deletedIndices.includes(index)) {
@@ -61,7 +65,7 @@ export function ImageUpload({
 		})
 
 		return result
-	}, [localPreviews, previewUrls, deletedIndices])
+	}, [localPreviews, previewUrls, deletedIndices, multiple])
 
 	const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const files = e.target.files
@@ -91,7 +95,7 @@ export function ImageUpload({
 		})
 	}
 
-	const handleRemove = (imageData: { url: string; isExisting: boolean; originalIndex?: number }, displayIndex: number) => {
+	const handleRemove = (imageData: { url: string; isExisting: boolean; originalIndex?: number }, _displayIndex: number) => {
 		if (imageData.isExisting && imageData.originalIndex !== undefined) {
 			// Удаляем существующее изображение
 			setDeletedIndices(prev => {
@@ -100,21 +104,27 @@ export function ImageUpload({
 				}
 				return prev
 			})
-			
+
 			// Вызываем колбэк для удаления на сервере
 			if (onDeleteExisting) {
-				onDeleteExisting(imageData.originalIndex, imageData.url)
+				// Для одиночных изображений (не multiple), вызываем без параметров
+				// Для множественных изображений, передаем index и url
+				if (multiple) {
+					(onDeleteExisting as (index: number, url: string) => void)(imageData.originalIndex, imageData.url)
+				} else {
+					(onDeleteExisting as () => void)()
+				}
 			}
 		} else {
 			// Удаляем новое изображение из локального состояния
 			// Найти индекс этого URL среди localPreviews
 			const urlToRemove = imageData.url
 			const indexInLocalPreviews = localPreviews.findIndex(url => url === urlToRemove)
-			
+
 			if (indexInLocalPreviews >= 0) {
 				const newPreviews = localPreviews.filter((_, i) => i !== indexInLocalPreviews)
 				setLocalPreviews(newPreviews)
-				
+
 				if (multiple && Array.isArray(value)) {
 					const newFiles = value.filter((_, i) => i !== indexInLocalPreviews)
 					onChange(newFiles.length > 0 ? (newFiles as File[]) : null)
