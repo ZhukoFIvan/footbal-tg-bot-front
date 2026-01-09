@@ -5,6 +5,8 @@ import {
 	useGetAdminPromoCodesQuery,
 	useDeletePromoCodeMutation,
 } from '@/app/store/api/promoCodesApi'
+import { useAppSelector } from '@/app/store/hooks'
+import { selectIsAuthenticated } from '@/app/store/slices/authSlice'
 import { Button } from '@/components/ui/button'
 import { formatDistanceToNow } from 'date-fns'
 import { ru } from 'date-fns/locale'
@@ -14,7 +16,11 @@ import Loader from '@/app/components/Loader/Loader'
 
 export default function AdminPromoCodesPage() {
 	const router = useRouter()
-	const { data: promoCodes, isLoading } = useGetAdminPromoCodesQuery({})
+	const isAuthenticated = useAppSelector(selectIsAuthenticated)
+	const { data: promoCodes, isLoading } = useGetAdminPromoCodesQuery(
+		{},
+		{ skip: !isAuthenticated }
+	)
 	const [deletePromoCode] = useDeletePromoCodeMutation()
 
 	const handleDelete = async (id: number, code: string) => {

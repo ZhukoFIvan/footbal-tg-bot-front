@@ -16,10 +16,9 @@ export default function Home() {
 	const isAdmin = useAppSelector(selectIsAdmin)
 
 	// Получаем все данные сразу (без кеширования)
-	const { data: sections, isLoading: isSectionsLoading } = useGetSectionsQuery()
-	const { data: categories, isLoading: isCategoriesLoading } =
-		useGetCategoriesQuery()
-	const { data: mainCategories, isLoading: isMainCategoriesLoading } =
+	const { isLoading: isSectionsLoading } = useGetSectionsQuery()
+	const { isLoading: isCategoriesLoading } = useGetCategoriesQuery()
+	const { isLoading: isMainCategoriesLoading } =
 		useGetMainScreenCategoriesQuery({
 			limit_per_category: 8,
 		})

@@ -348,6 +348,7 @@ const adminApi = baseApi.injectEndpoints({
 		// Badges
 		getAdminBadges: builder.query<AdminBadge[], void>({
 			query: () => '/admin/badges',
+			providesTags: ['Badges'],
 		}),
 
 		createBadge: builder.mutation<AdminBadge, Partial<AdminBadge>>({
@@ -356,6 +357,7 @@ const adminApi = baseApi.injectEndpoints({
 				method: 'POST',
 				body,
 			}),
+			invalidatesTags: ['Badges'],
 		}),
 
 		updateBadge: builder.mutation<
@@ -367,6 +369,7 @@ const adminApi = baseApi.injectEndpoints({
 				method: 'PATCH',
 				body: data,
 			}),
+			invalidatesTags: ['Badges'],
 		}),
 
 		deleteBadge: builder.mutation<void, number>({
@@ -374,6 +377,7 @@ const adminApi = baseApi.injectEndpoints({
 				url: `/admin/badges/${id}`,
 				method: 'DELETE',
 			}),
+			invalidatesTags: ['Badges'],
 		}),
 
 		// Banners

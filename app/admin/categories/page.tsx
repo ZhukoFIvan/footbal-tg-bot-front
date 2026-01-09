@@ -6,6 +6,8 @@ import {
 	useGetAdminCategoriesQuery,
 	useDeleteCategoryMutation,
 } from '@/app/store/api/adminApi'
+import { useAppSelector } from '@/app/store/hooks'
+import { selectIsAuthenticated } from '@/app/store/slices/authSlice'
 import { Button } from '@/components/ui/button'
 import { Plus, Edit, Trash2, MoreVertical } from 'lucide-react'
 import Loader from '@/app/components/Loader/Loader'
@@ -22,7 +24,13 @@ const getImageUrl = (imagePath: string | null) => {
 
 export default function AdminCategoriesPage() {
 	const router = useRouter()
-	const { data: categories, isLoading } = useGetAdminCategoriesQuery()
+	const isAuthenticated = useAppSelector(selectIsAuthenticated)
+	const { data: categories, isLoading } = useGetAdminCategoriesQuery(
+		undefined,
+		{
+			skip: !isAuthenticated,
+		}
+	)
 	const [deleteCategory] = useDeleteCategoryMutation()
 	const [activeMenu, setActiveMenu] = useState<number | null>(null)
 

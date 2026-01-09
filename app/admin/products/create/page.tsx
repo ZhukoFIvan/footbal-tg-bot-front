@@ -8,6 +8,8 @@ import {
 	useGetAdminSectionsQuery,
 	useGetAdminBadgesQuery,
 } from '@/app/store/api/adminApi'
+import { useAppSelector } from '@/app/store/hooks'
+import { selectIsAuthenticated } from '@/app/store/slices/authSlice'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import Loader from '@/app/components/Loader/Loader'
@@ -19,12 +21,16 @@ import {
 
 export default function CreateProductPage() {
 	const router = useRouter()
+	const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
 	const { data: categories, isLoading: categoriesLoading } =
-		useGetAdminCategoriesQuery()
+		useGetAdminCategoriesQuery(undefined, { skip: !isAuthenticated })
 	const { data: sections, isLoading: sectionsLoading } =
-		useGetAdminSectionsQuery()
-	const { data: badges, isLoading: badgesLoading } = useGetAdminBadgesQuery()
+		useGetAdminSectionsQuery(undefined, { skip: !isAuthenticated })
+	const { data: badges, isLoading: badgesLoading } = useGetAdminBadgesQuery(
+		undefined,
+		{ skip: !isAuthenticated }
+	)
 
 	const [createProduct, { isLoading: creating }] = useCreateProductMutation()
 	const [uploadImages, { isLoading: uploading }] =

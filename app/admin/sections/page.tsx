@@ -6,6 +6,8 @@ import {
 	useGetAdminSectionsQuery,
 	useDeleteSectionMutation,
 } from '@/app/store/api/adminApi'
+import { useAppSelector } from '@/app/store/hooks'
+import { selectIsAuthenticated } from '@/app/store/slices/authSlice'
 import { Button } from '@/components/ui/button'
 import { Plus, Edit, Trash2, MoreVertical, Clock } from 'lucide-react'
 import Loader from '@/app/components/Loader/Loader'
@@ -22,7 +24,10 @@ const getImageUrl = (imagePath: string | null) => {
 
 export default function AdminSectionsPage() {
 	const router = useRouter()
-	const { data: sections, isLoading } = useGetAdminSectionsQuery()
+	const isAuthenticated = useAppSelector(selectIsAuthenticated)
+	const { data: sections, isLoading } = useGetAdminSectionsQuery(undefined, {
+		skip: !isAuthenticated,
+	})
 	const [deleteSection] = useDeleteSectionMutation()
 	const [activeMenu, setActiveMenu] = useState<number | null>(null)
 

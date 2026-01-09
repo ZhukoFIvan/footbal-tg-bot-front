@@ -7,6 +7,8 @@ import {
 	useUpdateSectionMutation,
 	useUploadSectionImageMutation,
 } from '@/app/store/api/adminApi'
+import { useAppSelector } from '@/app/store/hooks'
+import { selectIsAuthenticated } from '@/app/store/slices/authSlice'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import Loader from '@/app/components/Loader/Loader'
@@ -25,8 +27,11 @@ export default function EditSectionPage({ params }: { params: Promise<{ id: stri
 	const resolvedParams = use(params)
 	const router = useRouter()
 	const sectionId = parseInt(resolvedParams.id)
+	const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
-	const { data: sections, isLoading } = useGetAdminSectionsQuery()
+	const { data: sections, isLoading } = useGetAdminSectionsQuery(undefined, {
+		skip: !isAuthenticated,
+	})
 	const [updateSection, { isLoading: updating }] = useUpdateSectionMutation()
 	const [uploadImage, { isLoading: uploading }] = useUploadSectionImageMutation()
 

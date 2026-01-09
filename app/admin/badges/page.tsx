@@ -6,6 +6,8 @@ import {
 	useGetAdminBadgesQuery,
 	useDeleteBadgeMutation,
 } from '@/app/store/api/adminApi'
+import { useAppSelector } from '@/app/store/hooks'
+import { selectIsAuthenticated } from '@/app/store/slices/authSlice'
 import { Button } from '@/components/ui/button'
 import { Plus, Edit, Trash2, MoreVertical, Tag } from 'lucide-react'
 import Loader from '@/app/components/Loader/Loader'
@@ -13,7 +15,10 @@ import AdminHeader from '@/app/components/admin/shared/AdminHeader'
 
 export default function AdminBadgesPage() {
 	const router = useRouter()
-	const { data: badges, isLoading } = useGetAdminBadgesQuery()
+	const isAuthenticated = useAppSelector(selectIsAuthenticated)
+	const { data: badges, isLoading } = useGetAdminBadgesQuery(undefined, {
+		skip: !isAuthenticated,
+	})
 	const [deleteBadge] = useDeleteBadgeMutation()
 	const [activeMenu, setActiveMenu] = useState<number | null>(null)
 

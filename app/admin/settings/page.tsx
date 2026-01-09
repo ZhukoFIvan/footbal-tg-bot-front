@@ -4,13 +4,19 @@ import {
 	useGetAdminSiteSettingsQuery,
 	useUpdateSiteSettingsMutation,
 } from '@/app/store/api/settingsApi'
+import { useAppSelector } from '@/app/store/hooks'
+import { selectIsAuthenticated } from '@/app/store/slices/authSlice'
 import Loader from '@/app/components/Loader/Loader'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import AdminHeader from '@/app/components/admin/shared/AdminHeader'
 
 export default function AdminSettingsPage() {
-	const { data: settings, isLoading, error } = useGetAdminSiteSettingsQuery()
+	const isAuthenticated = useAppSelector(selectIsAuthenticated)
+	const { data: settings, isLoading, error } = useGetAdminSiteSettingsQuery(
+		undefined,
+		{ skip: !isAuthenticated }
+	)
 	const [updateSettings, { isLoading: isUpdating }] =
 		useUpdateSiteSettingsMutation()
 

@@ -11,6 +11,8 @@ import {
 	useGetAdminBadgesQuery,
 } from '@/app/store/api/adminApi'
 import { useGetProductQuery } from '@/app/store/api/productsApi'
+import { useAppSelector } from '@/app/store/hooks'
+import { selectIsAuthenticated } from '@/app/store/slices/authSlice'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import Loader from '@/app/components/Loader/Loader'
@@ -52,6 +54,7 @@ export default function EditProductPage({
 	const resolvedParams = use(params)
 	const router = useRouter()
 	const productId = parseInt(resolvedParams.id)
+	const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
 	const {
 		data: product,
@@ -59,10 +62,13 @@ export default function EditProductPage({
 		error: productError,
 	} = useGetProductQuery(productId)
 	const { data: categories, isLoading: categoriesLoading } =
-		useGetAdminCategoriesQuery()
+		useGetAdminCategoriesQuery(undefined, { skip: !isAuthenticated })
 	const { data: sections, isLoading: sectionsLoading } =
-		useGetAdminSectionsQuery()
-	const { data: badges, isLoading: badgesLoading } = useGetAdminBadgesQuery()
+		useGetAdminSectionsQuery(undefined, { skip: !isAuthenticated })
+	const { data: badges, isLoading: badgesLoading } = useGetAdminBadgesQuery(
+		undefined,
+		{ skip: !isAuthenticated }
+	)
 
 	const [updateProduct, { isLoading: updating }] = useUpdateProductMutation()
 	const [uploadImages, { isLoading: uploading }] =

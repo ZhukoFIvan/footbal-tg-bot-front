@@ -6,6 +6,8 @@ import {
 	useGetAdminCategoriesQuery,
 	useUpdateCategoryMutation,
 } from '@/app/store/api/adminApi'
+import { useAppSelector } from '@/app/store/hooks'
+import { selectIsAuthenticated } from '@/app/store/slices/authSlice'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import Loader from '@/app/components/Loader/Loader'
@@ -28,8 +30,12 @@ export default function EditCategoryPage({
 	const resolvedParams = use(params)
 	const router = useRouter()
 	const categoryId = parseInt(resolvedParams.id)
+	const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
-	const { data: categories, isLoading } = useGetAdminCategoriesQuery()
+	const { data: categories, isLoading } = useGetAdminCategoriesQuery(
+		undefined,
+		{ skip: !isAuthenticated }
+	)
 	const [updateCategory, { isLoading: updating }] = useUpdateCategoryMutation()
 
 	const category = categories?.find((c) => c.id === categoryId)

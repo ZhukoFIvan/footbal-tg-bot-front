@@ -8,6 +8,8 @@ import {
 	useSubtractBonusMutation,
 	useSetBalanceMutation,
 } from '@/app/store/api/adminApi'
+import { useAppSelector } from '@/app/store/hooks'
+import { selectIsAuthenticated } from '@/app/store/slices/authSlice'
 import { Button } from '@/components/ui/button'
 import { Plus, Minus, Edit, Search } from 'lucide-react'
 import Loader from '@/app/components/Loader/Loader'
@@ -22,12 +24,14 @@ import {
 export default function AdminBonusPage() {
 	const [activeTab, setActiveTab] = useState<'users' | 'transactions'>('users')
 	const [search, setSearch] = useState('')
+	const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
 	const { data: users, isLoading: usersLoading } = useGetAdminBonusUsersQuery(
-		{}
+		{},
+		{ skip: !isAuthenticated }
 	)
 	const { data: transactions, isLoading: transactionsLoading } =
-		useGetAdminBonusTransactionsQuery({})
+		useGetAdminBonusTransactionsQuery({}, { skip: !isAuthenticated })
 
 	const [addBonus] = useAddBonusMutation()
 	const [subtractBonus] = useSubtractBonusMutation()

@@ -22,6 +22,7 @@ export const baseApi = createApi({
 		'Sections',
 		'Categories',
 		'Products',
+		'Badges',
 		'Cart',
 		'Bonus',
 		'SiteSettings',

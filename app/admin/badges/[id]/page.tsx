@@ -3,6 +3,8 @@
 import { use } from 'react'
 import { useRouter } from 'next/navigation'
 import { useGetAdminBadgesQuery, useUpdateBadgeMutation } from '@/app/store/api/adminApi'
+import { useAppSelector } from '@/app/store/hooks'
+import { selectIsAuthenticated } from '@/app/store/slices/authSlice'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import Loader from '@/app/components/Loader/Loader'
@@ -13,8 +15,11 @@ export default function EditBadgePage({ params }: { params: Promise<{ id: string
 	const resolvedParams = use(params)
 	const router = useRouter()
 	const badgeId = parseInt(resolvedParams.id)
+	const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
-	const { data: badges, isLoading } = useGetAdminBadgesQuery()
+	const { data: badges, isLoading } = useGetAdminBadgesQuery(undefined, {
+		skip: !isAuthenticated,
+	})
 	const [updateBadge, { isLoading: updating }] = useUpdateBadgeMutation()
 
 	const badge = badges?.find((b) => b.id === badgeId)

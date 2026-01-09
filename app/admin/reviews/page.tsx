@@ -8,6 +8,8 @@ import {
 	useModerateReviewMutation,
 	useDeleteAdminReviewMutation,
 } from '@/app/store/api/reviewsApi'
+import { useAppSelector } from '@/app/store/hooks'
+import { selectIsAuthenticated } from '@/app/store/slices/authSlice'
 import { Button } from '@/components/ui/button'
 import {
 	Check,
@@ -29,15 +31,22 @@ type StatusFilter = 'all' | 'pending' | 'approved' | 'rejected'
 export default function AdminReviewsPage() {
 	const router = useRouter()
 	const [statusFilter, setStatusFilter] = useState<StatusFilter>('pending')
+	const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
 	// Queries
-	const { data: stats, isLoading: statsLoading } = useGetAdminReviewStatsQuery()
+	const { data: stats, isLoading: statsLoading } = useGetAdminReviewStatsQuery(
+		undefined,
+		{ skip: !isAuthenticated }
+	)
 	const {
 		data: reviews,
 		isLoading: reviewsLoading,
-	} = useGetAdminReviewsQuery({
-		status: statusFilter === 'all' ? undefined : statusFilter,
-	})
+	} = useGetAdminReviewsQuery(
+		{
+			status: statusFilter === 'all' ? undefined : statusFilter,
+		},
+		{ skip: !isAuthenticated }
+	)
 
 	// Mutations
 	const [moderateReview] = useModerateReviewMutation()
