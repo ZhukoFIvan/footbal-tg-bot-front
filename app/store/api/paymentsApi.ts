@@ -1,8 +1,7 @@
 import { baseApi } from "./baseApi";
 
 export interface CreatePaymentRequest {
-  provider: "freekassa" | "paypalych";
-  payment_method: "card" | "sbp";
+  payment_method: "card" | "sbp"; // Провайдер выбирается автоматически: card → FreeKassa, sbp → Paypalych
   promo_code?: string;
   bonus_to_use?: number;
 }
@@ -30,4 +29,3 @@ export const paymentsApi = baseApi.injectEndpoints({
 });
 
 export const { useCreatePaymentMutation } = paymentsApi;
-

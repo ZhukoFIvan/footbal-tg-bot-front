@@ -7,22 +7,16 @@ import { Button } from "@/components/ui/button";
 interface PaymentProviderDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectProvider: (
-    provider: "freekassa" | "paypalych",
-    method: "card" | "sbp"
-  ) => void;
+  onSelectMethod: (method: "card" | "sbp") => void;
   isLoading?: boolean;
 }
 
 export function PaymentProviderDrawer({
   isOpen,
   onClose,
-  onSelectProvider,
+  onSelectMethod,
   isLoading = false,
 }: PaymentProviderDrawerProps) {
-  const [selectedProvider, setSelectedProvider] = useState<
-    "freekassa" | "paypalych" | null
-  >(null);
   const [selectedMethod, setSelectedMethod] = useState<"card" | "sbp" | null>(
     null
   );
@@ -40,15 +34,15 @@ export function PaymentProviderDrawer({
     };
   }, [isOpen]);
 
-  const handleConfirm = () => {
-    if (selectedProvider && selectedMethod) {
-      onSelectProvider(selectedProvider, selectedMethod);
+  const handleMethodSelect = (method: "card" | "sbp") => {
+    if (!isLoading) {
+      setSelectedMethod(method);
+      onSelectMethod(method);
     }
   };
 
   const handleClose = () => {
     if (!isLoading) {
-      setSelectedProvider(null);
       setSelectedMethod(null);
       onClose();
     }
@@ -70,9 +64,7 @@ export function PaymentProviderDrawer({
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-foreground">
-              {!selectedMethod
-                ? "Выберите способ оплаты"
-                : "Выберите платежную систему"}
+              Выберите способ оплаты
             </h2>
             <button
               onClick={handleClose}
@@ -83,15 +75,11 @@ export function PaymentProviderDrawer({
             </button>
           </div>
 
-          {/* Payment Methods - Показываем сначала */}
-          <div className="space-y-4 mb-6">
-            <div className="text-sm text-foreground/70 font-medium mb-3">
-              Способ оплаты
-            </div>
-
-            {/* Card */}
+          {/* Payment Methods - Только способ оплаты */}
+          <div className="space-y-4">
+            {/* Card - автоматически выберет FreeKassa */}
             <button
-              onClick={() => setSelectedMethod("card")}
+              onClick={() => handleMethodSelect("card")}
               disabled={isLoading}
               className={`w-full p-4 rounded-2xl border-2 transition-all disabled:opacity-50 ${
                 selectedMethod === "card"
@@ -121,9 +109,9 @@ export function PaymentProviderDrawer({
               </div>
             </button>
 
-            {/* SBP */}
+            {/* SBP - автоматически выберет Paypalych */}
             <button
-              onClick={() => setSelectedMethod("sbp")}
+              onClick={() => handleMethodSelect("sbp")}
               disabled={isLoading}
               className={`w-full p-4 rounded-2xl border-2 transition-all disabled:opacity-50 ${
                 selectedMethod === "sbp"
@@ -153,88 +141,6 @@ export function PaymentProviderDrawer({
               </div>
             </button>
           </div>
-
-          {/* Payment Providers - Показываем после выбора способа */}
-          {selectedMethod && (
-            <div className="space-y-4 mb-6">
-              <div className="text-sm text-foreground/70 font-medium mb-3">
-                Платежная система
-              </div>
-
-              {/* FreeKassa */}
-              <button
-                onClick={() => setSelectedProvider("freekassa")}
-                disabled={isLoading}
-                className={`w-full p-4 rounded-2xl border-2 transition-all disabled:opacity-50 ${
-                  selectedProvider === "freekassa"
-                    ? "border-primary bg-primary/10"
-                    : "border-white/10 bg-background hover:border-white/20"
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
-                      <span className="text-lg font-bold text-primary">FK</span>
-                    </div>
-                    <div className="text-left">
-                      <div className="font-semibold text-foreground">
-                        FreeKassa
-                      </div>
-                      <div className="text-sm text-foreground/60">
-                        Популярная система
-                      </div>
-                    </div>
-                  </div>
-                  {selectedProvider === "freekassa" && (
-                    <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-white" />
-                    </div>
-                  )}
-                </div>
-              </button>
-
-              {/* Paypalych */}
-              <button
-                onClick={() => setSelectedProvider("paypalych")}
-                disabled={isLoading}
-                className={`w-full p-4 rounded-2xl border-2 transition-all disabled:opacity-50 ${
-                  selectedProvider === "paypalych"
-                    ? "border-primary bg-primary/10"
-                    : "border-white/10 bg-background hover:border-white/20"
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
-                      <span className="text-lg font-bold text-primary">PP</span>
-                    </div>
-                    <div className="text-left">
-                      <div className="font-semibold text-foreground">
-                        Paypalych
-                      </div>
-                      <div className="text-sm text-foreground/60">
-                        Быстрая оплата
-                      </div>
-                    </div>
-                  </div>
-                  {selectedProvider === "paypalych" && (
-                    <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-white" />
-                    </div>
-                  )}
-                </div>
-              </button>
-            </div>
-          )}
-
-          {/* Confirm Button */}
-          <Button
-            onClick={handleConfirm}
-            disabled={!selectedProvider || !selectedMethod || isLoading}
-            className="w-full h-14 rounded-full bg-primary hover:bg-primary-hover text-white text-lg font-semibold shadow-[0_0_20px_rgba(33,188,96,0.3)] disabled:opacity-50"
-          >
-            {isLoading ? "Создание платежа..." : "Продолжить"}
-          </Button>
         </div>
       </div>
     </>

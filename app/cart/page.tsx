@@ -138,13 +138,9 @@ export default function CartPage() {
     setIsProviderDrawerOpen(true);
   };
 
-  const handleProviderSelect = async (
-    provider: "freekassa" | "paypalych",
-    method: "card" | "sbp"
-  ) => {
+  const handleMethodSelect = async (method: "card" | "sbp") => {
     try {
       const payment = await createPayment({
-        provider,
         payment_method: method,
         bonus_to_use: bonusToUse,
         promo_code: appliedPromo?.code,
@@ -246,7 +242,7 @@ export default function CartPage() {
       <PaymentProviderDrawer
         isOpen={isProviderDrawerOpen}
         onClose={() => setIsProviderDrawerOpen(false)}
-        onSelectProvider={handleProviderSelect}
+        onSelectMethod={handleMethodSelect}
         isLoading={paymentLoading}
       />
     </div>
