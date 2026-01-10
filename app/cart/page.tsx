@@ -146,8 +146,15 @@ export default function CartPage() {
         promo_code: appliedPromo?.code,
       }).unwrap();
 
-      // Перенаправляем на страницу оплаты
-      window.location.href = payment.payment_url;
+      // Открываем страницу оплаты во внешнем браузере (не в Mini App)
+      if (typeof window !== "undefined" && (window as any).Telegram?.WebApp) {
+        (window as any).Telegram.WebApp.openLink(payment.payment_url);
+        setIsProviderDrawerOpen(false);
+      } else {
+        // Fallback для обычного браузера (для тестирования)
+        window.open(payment.payment_url, "_blank");
+        setIsProviderDrawerOpen(false);
+      }
     } catch (error: unknown) {
       setIsProviderDrawerOpen(false);
       let errorMsg = "Ошибка создания платежа";
