@@ -70,8 +70,8 @@ export default function AdminBonusPage() {
 				const setBalanceData = data as BonusSetBalanceInput
 				await setBalance({
 					user_id: setBalanceData.user_id,
-					balance: setBalanceData.new_balance,
-					description: setBalanceData.description as string | undefined,
+					new_balance: setBalanceData.new_balance,
+					description: setBalanceData.description ?? undefined,
 				}).unwrap()
 			}
 

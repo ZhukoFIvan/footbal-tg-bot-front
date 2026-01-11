@@ -469,7 +469,7 @@ const adminApi = baseApi.injectEndpoints({
 
 		setBalance: builder.mutation<
 			void,
-			{ user_id: number; balance: number; description?: string }
+			{ user_id: number; new_balance: number; description?: string }
 		>({
 			query: (body) => ({
 				url: '/admin/bonus/set-balance',

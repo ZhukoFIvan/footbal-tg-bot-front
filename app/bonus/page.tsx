@@ -83,58 +83,55 @@ export default function BonusPage() {
 							Карта наград
 						</h3>
 						<div className='space-y-3'>
-							{Object.entries(milestones.milestones).map(([orders, bonus]) => {
-								const completed =
-									bonusInfo && bonusInfo.total_orders >= parseInt(orders)
-								const isCurrent =
-									bonusInfo?.next_milestone?.orders === parseInt(orders)
+							{Object.entries(milestones.milestones).map(
+								([orders, milestoneData]) => {
+									const completed =
+										bonusInfo && bonusInfo.total_orders >= parseInt(orders)
+									const isCurrent =
+										bonusInfo?.next_milestone?.orders === parseInt(orders)
 
-								return (
-									<div
-										key={orders}
-										className={`flex items-center justify-between p-3 rounded-xl transition-colors ${
-											isCurrent
-												? 'bg-primary/10 border border-primary/30'
-												: 'bg-element-bg/60'
-										} ${completed ? 'opacity-50' : ''}`}
-									>
-										<div className='flex items-center gap-3'>
-											<div
-												className={`w-8 h-8 rounded-full flex items-center justify-center ${
-													completed
-														? 'bg-primary text-white'
-														: 'bg-element-bg text-foreground/50'
-												}`}
-											>
-												{completed ? '✓' : parseInt(orders)}
-											</div>
-											<div>
-												<p className='text-foreground font-medium'>
-													{parseInt(orders) === 1
-														? '1 покупка'
-														: `${orders} покупки`}
-												</p>
-												{bonus === 0 && (
-													<p className='text-xs text-foreground/50'>
-														Усилитель B
+									return (
+										<div
+											key={orders}
+											className={`flex items-center justify-between p-3 rounded-xl transition-colors ${
+												isCurrent
+													? 'bg-primary/10 border border-primary/30'
+													: 'bg-element-bg/60'
+											} ${completed ? 'opacity-50' : ''}`}
+										>
+											<div className='flex items-center gap-3'>
+												<div
+													className={`w-8 h-8 rounded-full flex items-center justify-center ${
+														completed
+															? 'bg-primary text-white'
+															: 'bg-element-bg text-foreground/50'
+													}`}
+												>
+													{completed ? '✓' : parseInt(orders)}
+												</div>
+												<div>
+													<p className='text-foreground font-medium'>
+														{parseInt(orders) === 1
+															? '1 покупка'
+															: `${orders} покупок`}
 													</p>
-												)}
+												</div>
+											</div>
+											<div className='text-right'>
+												<span
+													className={`${
+														milestoneData.bonus > 0
+															? 'text-primary font-semibold'
+															: 'text-foreground/70 text-sm'
+													}`}
+												>
+													{milestoneData.description}
+												</span>
 											</div>
 										</div>
-										<div className='text-right'>
-											{bonus > 0 ? (
-												<span className='text-primary font-semibold'>
-													{rub(bonus)}
-												</span>
-											) : (
-												<span className='text-foreground/50 text-sm'>
-													Секретный подарок
-												</span>
-											)}
-										</div>
-									</div>
-								)
-							})}
+									)
+								}
+							)}
 						</div>
 					</div>
 				)}

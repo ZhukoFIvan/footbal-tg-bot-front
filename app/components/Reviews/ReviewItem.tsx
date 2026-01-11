@@ -28,39 +28,39 @@ export const ReviewItem: React.FC<ReviewItemProps> = ({
 	})
 
 	// Проверяем разницу больше 1 секунды (чтобы избежать ложных срабатываний)
-	const isEdited = Math.abs(updatedDate.getTime() - createdDate.getTime()) > 1000
-	
+	const isEdited =
+		Math.abs(updatedDate.getTime() - createdDate.getTime()) > 1000
+
 	// Безопасное получение имени и первой буквы
-	const displayName = review.user.display_name || review.user.first_name || 'User'
+	const displayName =
+		review.user.display_name || review.user.first_name || 'User'
 	const avatarLetter = displayName.charAt(0).toUpperCase()
 
 	return (
-		<div className="py-4 border-b border-foreground/10 last:border-0">
-			<div className="flex items-start justify-between gap-3">
+		<div className='py-4 border-b border-foreground/10 last:border-0'>
+			<div className='flex items-start justify-between gap-3'>
 				{/* Аватар и информация */}
-				<div className="flex gap-3 flex-1">
+				<div className='flex gap-3 flex-1'>
 					{/* Аватар */}
-					<div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold flex-shrink-0">
+					<div className='w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold flex-shrink-0'>
 						{avatarLetter}
 					</div>
 
 					{/* Контент */}
-					<div className="flex-1 min-w-0">
+					<div className='flex-1 min-w-0'>
 						{/* Имя и рейтинг */}
-						<div className="flex items-center gap-2 mb-1">
-							<span className="font-medium text-foreground truncate">
-								{displayName}
+						<div className='flex items-center gap-2 mb-1'>
+							<span className='font-medium text-foreground truncate'>
+								{displayName.slice(0, Math.floor(displayName.length / 2)) +
+									'*'.repeat(
+										displayName.length - Math.floor(displayName.length / 2)
+									)}
 							</span>
-							{review.user.username && (
-								<span className="text-sm text-foreground/60">
-									@{review.user.username}
-								</span>
-							)}
 						</div>
 
-						<div className="flex items-center gap-2 mb-2">
-							<StarRating rating={review.rating} size="sm" />
-							<span className="text-xs text-foreground/60">
+						<div className='flex items-center gap-2 mb-2'>
+							<StarRating rating={review.rating} size='sm' />
+							<span className='text-xs text-foreground/60'>
 								{timeAgo}
 								{isEdited && ' (изменено)'}
 							</span>
@@ -80,7 +80,7 @@ export const ReviewItem: React.FC<ReviewItemProps> = ({
 
 						{/* Комментарий */}
 						{review.comment && (
-							<p className="text-sm text-foreground/80 whitespace-pre-wrap break-words">
+							<p className='text-sm text-foreground/80 whitespace-pre-wrap break-words'>
 								{review.comment}
 							</p>
 						)}
@@ -89,22 +89,22 @@ export const ReviewItem: React.FC<ReviewItemProps> = ({
 
 				{/* Действия для своих отзывов */}
 				{review.is_own && (onEdit || onDelete) && (
-					<div className="relative">
+					<div className='relative'>
 						<button
 							onClick={() => setShowActions(!showActions)}
-							className="p-2 hover:bg-element-bg rounded-full transition-colors"
+							className='p-2 hover:bg-element-bg rounded-full transition-colors'
 						>
 							<svg
-								className="w-5 h-5 text-foreground/60"
-								fill="none"
-								stroke="currentColor"
-								viewBox="0 0 24 24"
+								className='w-5 h-5 text-foreground/60'
+								fill='none'
+								stroke='currentColor'
+								viewBox='0 0 24 24'
 							>
 								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
+									strokeLinecap='round'
+									strokeLinejoin='round'
 									strokeWidth={2}
-									d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+									d='M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z'
 								/>
 							</svg>
 						</button>
@@ -112,29 +112,29 @@ export const ReviewItem: React.FC<ReviewItemProps> = ({
 						{showActions && (
 							<>
 								<div
-									className="fixed inset-0 z-10"
+									className='fixed inset-0 z-10'
 									onClick={() => setShowActions(false)}
 								/>
-								<div className="absolute right-0 mt-1 w-40 bg-background rounded-lg shadow-lg border border-foreground/20 py-1 z-20">
+								<div className='absolute right-0 mt-1 w-40 bg-background rounded-lg shadow-lg border border-foreground/20 py-1 z-20'>
 									{onEdit && (
 										<button
 											onClick={() => {
 												onEdit(review)
 												setShowActions(false)
 											}}
-											className="w-full px-4 py-2 text-left text-sm text-foreground hover:bg-element-bg flex items-center gap-2"
+											className='w-full px-4 py-2 text-left text-sm text-foreground hover:bg-element-bg flex items-center gap-2'
 										>
 											<svg
-												className="w-4 h-4"
-												fill="none"
-												stroke="currentColor"
-												viewBox="0 0 24 24"
+												className='w-4 h-4'
+												fill='none'
+												stroke='currentColor'
+												viewBox='0 0 24 24'
 											>
 												<path
-													strokeLinecap="round"
-													strokeLinejoin="round"
+													strokeLinecap='round'
+													strokeLinejoin='round'
 													strokeWidth={2}
-													d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+													d='M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'
 												/>
 											</svg>
 											Редактировать
@@ -146,19 +146,19 @@ export const ReviewItem: React.FC<ReviewItemProps> = ({
 												onDelete(review.id)
 												setShowActions(false)
 											}}
-											className="w-full px-4 py-2 text-left text-sm text-red-500 hover:bg-red-500/10 flex items-center gap-2"
+											className='w-full px-4 py-2 text-left text-sm text-red-500 hover:bg-red-500/10 flex items-center gap-2'
 										>
 											<svg
-												className="w-4 h-4"
-												fill="none"
-												stroke="currentColor"
-												viewBox="0 0 24 24"
+												className='w-4 h-4'
+												fill='none'
+												stroke='currentColor'
+												viewBox='0 0 24 24'
 											>
 												<path
-													strokeLinecap="round"
-													strokeLinejoin="round"
+													strokeLinecap='round'
+													strokeLinejoin='round'
 													strokeWidth={2}
-													d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+													d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'
 												/>
 											</svg>
 											Удалить
@@ -173,4 +173,3 @@ export const ReviewItem: React.FC<ReviewItemProps> = ({
 		</div>
 	)
 }
-

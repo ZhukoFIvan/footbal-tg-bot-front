@@ -86,51 +86,49 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
 	return (
 		<div
 			onClick={onClick}
-			className='rounded-3xl bg-element-bg p-4 cursor-pointer transition-transform active:scale-[0.98] flex flex-col h-full'
+			className='rounded-3xl bg-element-bg p-4 cursor-pointer transition-transform active:scale-[0.98] flex flex-col h-full justify-between'
 		>
 			<div className='relative aspect-square w-full overflow-hidden rounded-2xl'>
-				{!imageLoaded && (
-					<div className='absolute inset-0 bg-element-bg' />
-				)}
-
-				{product.badge && (
-					<div className='absolute left-0.5 bottom-0.5 z-10'>
-						<span
-							className='rounded-full px-3 py-1 text-xs font-semibold'
-							style={{
-								backgroundColor: product.badge.color,
-								color: product.badge.text_color,
-							}}
-						>
-							{product.badge.title}
-						</span>
-					</div>
-				)}
-
-				{discount && (
-					<div className='absolute right-0.5 top-0.5 text-xs font-bold text-white z-10 bg-primary/60 backdrop-blur-md rounded-full px-1 py-0.5'>
-						-{discount}%
-					</div>
-				)}
+				{!imageLoaded && <div className='absolute inset-0 bg-element-bg' />}
 
 				<div className='flex h-full w-full items-center justify-center'>
-					<Image
-						src={getImageUrl(getFirstImage(product.images))}
-						alt={product.title}
-						className={`object-contain transition-opacity duration-300 rounded-2xl ${
-							imageLoaded ? 'opacity-100' : 'opacity-0'
-						}`}
-						width={180}
-						height={130}
-						unoptimized
-						onLoad={() => setImageLoaded(true)}
-						priority
-					/>
+					<div className='relative inline-block'>
+						<Image
+							src={getImageUrl(getFirstImage(product.images))}
+							alt={product.title}
+							className={`object-contain transition-opacity duration-300 rounded-2xl ${
+								imageLoaded ? 'opacity-100' : 'opacity-0'
+							}`}
+							width={300}
+							height={200}
+							unoptimized
+							onLoad={() => setImageLoaded(true)}
+							priority
+						/>
+						{product.badge && (
+							<div className='absolute left-2 bottom-2 z-10'>
+								<span
+									className='rounded-full px-3 py-1 text-xs font-semibold'
+									style={{
+										backgroundColor: product.badge.color,
+										color: product.badge.text_color,
+									}}
+								>
+									{product.badge.title}
+								</span>
+							</div>
+						)}
+						{discount && (
+							<div className='absolute right-2 top-2 text-xs font-bold text-white z-10 bg-primary/60 backdrop-blur-md rounded-full px-1 py-0.5'>
+								-{discount}%
+							</div>
+						)}
+					</div>
 				</div>
 			</div>
 
 			{/* Title */}
-			<div className='mt-3 flex flex-col flex-1'>
+			<div className='flex flex-col'>
 				<p className='text-sm leading-snug text-foreground line-clamp-2'>
 					{product.title}
 				</p>

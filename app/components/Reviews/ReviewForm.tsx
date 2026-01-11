@@ -5,7 +5,6 @@ import { StarRating } from './StarRating'
 import { Review } from '@/app/store/api/reviewsApi'
 
 interface ReviewFormProps {
-	productId: number
 	editingReview?: Review | null
 	onSubmit: (data: { rating: number; comment: string }) => void
 	onCancel?: () => void
@@ -13,7 +12,6 @@ interface ReviewFormProps {
 }
 
 export const ReviewForm: React.FC<ReviewFormProps> = ({
-	productId,
 	editingReview,
 	onSubmit,
 	onCancel,
@@ -81,7 +79,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
 					id="comment"
 					value={comment}
 					onChange={(e) => setComment(e.target.value)}
-					placeholder="Расскажите о вашем опыте использования товара..."
+					placeholder="Расскажите о вашем опыте покупок в нашем магазине..."
 					rows={4}
 					maxLength={1000}
 					className="w-full px-3 py-2 bg-element-bg border border-foreground/20 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent resize-none text-foreground placeholder:text-foreground/50"

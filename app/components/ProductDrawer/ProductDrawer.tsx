@@ -18,7 +18,7 @@ import { useAddToServerCartMutation } from '@/app/store/api/serverCartApi'
 import { useIsInCart } from '@/app/store/hooks/useCart'
 import { useRouter } from 'next/navigation'
 import { ProductReviews } from '../Reviews/ProductReviews'
-import { useGetProductRatingQuery } from '@/app/store/api/reviewsApi'
+import { useGetShopRatingQuery } from '@/app/store/api/reviewsApi'
 
 const rub = (n: number) => new Intl.NumberFormat('ru-RU').format(n) + ' ₽'
 
@@ -78,10 +78,8 @@ export default function ProductDrawer({
 	const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({})
 	const [showReviews, setShowReviews] = useState(false)
 
-	// Получаем рейтинг товара
-	const { data: rating } = useGetProductRatingQuery(product?.id || 0, {
-		skip: !product?.id,
-	})
+	// Получаем рейтинг магазина
+	const { data: rating } = useGetShopRatingQuery()
 
 	// Для примера создаем массив изображений (в реальности они должны приходить с бэка)
 	const images = product
@@ -382,7 +380,7 @@ export default function ProductDrawer({
 						{/* Reviews Content */}
 						{showReviews && (
 							<div className='mt-4'>
-								<ProductReviews productId={product.id} />
+								<ProductReviews />
 							</div>
 						)}
 					</div>

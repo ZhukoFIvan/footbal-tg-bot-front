@@ -3,12 +3,18 @@
 import { useState, useEffect } from "react";
 import { Smartphone, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  AccountInfoForm,
+  AccountFormData,
+} from "@/components/AccountInfoForm/AccountInfoForm";
 
 interface PaymentProviderDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectMethod: (method: "card" | "sbp") => void;
+  onSelectMethod: (method: "card" | "sbp", accountInfo: AccountFormData) => void;
   isLoading?: boolean;
+  accountInfo: AccountFormData;
+  onAccountInfoChange: (data: AccountFormData) => void;
 }
 
 export function PaymentProviderDrawer({
@@ -16,10 +22,15 @@ export function PaymentProviderDrawer({
   onClose,
   onSelectMethod,
   isLoading = false,
+  accountInfo,
+  onAccountInfoChange,
 }: PaymentProviderDrawerProps) {
   const [selectedMethod, setSelectedMethod] = useState<"card" | "sbp" | null>(
     null
   );
+  const [validationErrors, setValidationErrors] = useState<
+    Record<string, string>
+  >({});
 
   // Управление overflow для body
   useEffect(() => {
@@ -34,10 +45,45 @@ export function PaymentProviderDrawer({
     };
   }, [isOpen]);
 
+  const validateAccountInfo = (): boolean => {
+    const errors: Record<string, string> = {};
+
+    if (!accountInfo.account_type) {
+      errors.account_type = "Выберите тип аккаунта";
+    }
+
+    if (!accountInfo.account_email.trim()) {
+      errors.account_email = "Введите email или телефон";
+    } else if (accountInfo.account_type !== "Facebook") {
+      // Валидация email для EA и Google
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(accountInfo.account_email)) {
+        errors.account_email = "Неверный формат email";
+      }
+    }
+
+    if (!accountInfo.account_name.trim()) {
+      errors.account_name = "Введите имя аккаунта";
+    }
+
+    if (
+      (accountInfo.account_type === "Facebook" ||
+        accountInfo.account_type === "Google") &&
+      !accountInfo.account_password
+    ) {
+      errors.account_password = "Пароль обязателен для этого типа аккаунта";
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleMethodSelect = (method: "card" | "sbp") => {
     if (!isLoading) {
-      setSelectedMethod(method);
-      onSelectMethod(method);
+      if (validateAccountInfo()) {
+        setSelectedMethod(method);
+        onSelectMethod(method, accountInfo);
+      }
     }
   };
 
@@ -74,6 +120,15 @@ export function PaymentProviderDrawer({
               <X className="w-6 h-6 text-foreground/70" />
             </button>
           </div>
+
+          {/* Account Info Form */}
+          <AccountInfoForm
+            value={accountInfo}
+            onChange={onAccountInfoChange}
+            errors={validationErrors}
+          />
+
+          <div className="my-4 border-t border-white/10"></div>
 
           {/* Payment Methods - Только способ оплаты */}
           <div className="space-y-4">

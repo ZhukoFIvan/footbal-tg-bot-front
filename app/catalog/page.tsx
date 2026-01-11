@@ -101,23 +101,29 @@ function CatalogContent() {
 					</div>
 				)}
 
-				{!isLoading && !error && sortedProducts && sortedProducts.length === 0 && (
-					<div className='flex items-center justify-center py-12'>
-						<p className='text-muted-foreground text-lg'>Товары не найдены</p>
-					</div>
-				)}
+				{!isLoading &&
+					!error &&
+					sortedProducts &&
+					sortedProducts.length === 0 && (
+						<div className='flex items-center justify-center py-12'>
+							<p className='text-muted-foreground text-lg'>Товары не найдены</p>
+						</div>
+					)}
 
-				{!isLoading && !error && sortedProducts && sortedProducts.length > 0 && (
-					<div className='grid grid-cols-2 gap-4'>
-						{sortedProducts.map((product) => (
-							<ProductCard
-								key={product.id}
-								product={product}
-								onClick={() => handleProductClick(product)}
-							/>
-						))}
-					</div>
-				)}
+				{!isLoading &&
+					!error &&
+					sortedProducts &&
+					sortedProducts.length > 0 && (
+						<div className='grid grid-cols-2 gap-4'>
+							{sortedProducts.map((product) => (
+								<ProductCard
+									key={product.id}
+									product={product}
+									onClick={() => handleProductClick(product)}
+								/>
+							))}
+						</div>
+					)}
 			</div>
 
 			<ProductDrawer

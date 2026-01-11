@@ -1,6 +1,6 @@
 import { baseApi } from './baseApi'
 
-// Типы для отзывов
+// Типы для отзывов (отзывы относятся ко всему магазину, а не к конкретным товарам)
 export interface ReviewUser {
 	id: number
 	first_name: string
@@ -11,7 +11,6 @@ export interface ReviewUser {
 
 export interface Review {
 	id: number
-	product_id: number
 	user: ReviewUser
 	rating: number
 	comment: string | null
@@ -21,7 +20,7 @@ export interface Review {
 	status?: 'pending' | 'rejected' | null
 }
 
-export interface ProductRating {
+export interface ShopRating {
 	average_rating: number
 	reviews_count: number
 	rating_distribution: {
@@ -42,16 +41,8 @@ export interface AdminReviewUser {
 	username: string | null
 }
 
-export interface AdminReviewProduct {
-	id: number
-	title: string
-	slug: string
-}
-
 export interface AdminReview {
 	id: number
-	product_id: number
-	product: AdminReviewProduct
 	user: AdminReviewUser
 	rating: number
 	comment: string | null
@@ -68,7 +59,6 @@ export interface ReviewStats {
 }
 
 interface CreateReviewRequest {
-	product_id: number
 	rating: number
 	comment?: string
 }
@@ -80,39 +70,35 @@ interface UpdateReviewRequest {
 
 export const reviewsApi = baseApi.injectEndpoints({
 	endpoints: (builder) => ({
-		// Получить отзывы товара
-		getProductReviews: builder.query<
+		// Получить отзывы на магазин
+		getShopReviews: builder.query<
 			Review[],
-			{ productId: number; limit?: number; offset?: number }
+			{ limit?: number; offset?: number } | void
 		>({
-			query: ({ productId, limit = 50, offset = 0 }) =>
-				`/products/${productId}/reviews?limit=${limit}&offset=${offset}`,
-			providesTags: (result, error, { productId }) => [
-				{ type: 'Reviews', id: `product-${productId}` },
-				{ type: 'Reviews', id: 'LIST' },
-			],
+			query: (params) => {
+				const limit = params?.limit ?? 50
+				const offset = params?.offset ?? 0
+				return `/reviews?limit=${limit}&offset=${offset}`
+			},
+			providesTags: [{ type: 'Reviews', id: 'LIST' }],
 		}),
 
-		// Получить статистику рейтинга товара
-		getProductRating: builder.query<ProductRating, number>({
-			query: (productId) => `/products/${productId}/rating`,
-			providesTags: (result, error, productId) => [
-				{ type: 'Reviews', id: `rating-${productId}` },
-				{ type: 'Reviews', id: `product-${productId}` },
-			],
+		// Получить статистику рейтинга магазина
+		getShopRating: builder.query<ShopRating, void>({
+			query: () => `/shop/rating`,
+			providesTags: [{ type: 'Reviews', id: 'RATING' }],
 		}),
 
-		// Создать отзыв
+		// Создать отзыв на магазин
 		createReview: builder.mutation<Review, CreateReviewRequest>({
 			query: (body) => ({
 				url: '/reviews',
 				method: 'POST',
 				body,
 			}),
-			invalidatesTags: (result, error, { product_id }) => [
-				{ type: 'Reviews', id: `product-${product_id}` },
-				{ type: 'Reviews', id: `rating-${product_id}` },
+			invalidatesTags: [
 				{ type: 'Reviews', id: 'LIST' },
+				{ type: 'Reviews', id: 'RATING' },
 			],
 		}),
 
@@ -126,29 +112,24 @@ export const reviewsApi = baseApi.injectEndpoints({
 				method: 'PUT',
 				body: data,
 			}),
-			invalidatesTags: (result) =>
-				result
-					? [
-							{ type: 'Reviews', id: `product-${result.product_id}` },
-							{ type: 'Reviews', id: `rating-${result.product_id}` },
-							{ type: 'Reviews', id: 'LIST' },
-					  ]
-					: [],
+			invalidatesTags: [
+				{ type: 'Reviews', id: 'LIST' },
+				{ type: 'Reviews', id: 'RATING' },
+			],
 		}),
 
 		// Удалить свой отзыв
 		deleteReview: builder.mutation<
 			{ ok: boolean; message: string },
-			{ reviewId: number; productId: number }
+			number
 		>({
-			query: ({ reviewId }) => ({
+			query: (reviewId) => ({
 				url: `/reviews/${reviewId}`,
 				method: 'DELETE',
 			}),
-			invalidatesTags: (result, error, { productId }) => [
-				{ type: 'Reviews', id: `product-${productId}` },
-				{ type: 'Reviews', id: `rating-${productId}` },
+			invalidatesTags: [
 				{ type: 'Reviews', id: 'LIST' },
+				{ type: 'Reviews', id: 'RATING' },
 			],
 		}),
 
@@ -220,8 +201,8 @@ export const reviewsApi = baseApi.injectEndpoints({
 })
 
 export const {
-	useGetProductReviewsQuery,
-	useGetProductRatingQuery,
+	useGetShopReviewsQuery,
+	useGetShopRatingQuery,
 	useCreateReviewMutation,
 	useUpdateReviewMutation,
 	useDeleteReviewMutation,

@@ -21,7 +21,7 @@ export interface BonusTransaction {
 }
 
 export interface BonusMilestones {
-	milestones: Record<number, number>
+	milestones: Record<number, { bonus: number; description: string }>
 	bonus_rate: number
 	max_usage_percent: number
 }

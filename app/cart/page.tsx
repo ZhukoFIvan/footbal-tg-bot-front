@@ -13,12 +13,19 @@ import { TotalBlock } from "@/components/ShoppingCart/TotalBlock/TotalBlock";
 import { BonusBlock } from "@/components/ShoppingCart/BonusBlock/BonusBlock";
 import { Input } from "@/components/ui/input";
 import { PaymentProviderDrawer } from "@/components/PaymentProviderDrawer/PaymentProviderDrawer";
+import { AccountFormData } from "@/components/AccountInfoForm/AccountInfoForm";
 
 export default function CartPage() {
   const router = useRouter();
 
   const [bonusToUse, setBonusToUse] = useState(0);
   const [promoCode, setPromoCode] = useState("");
+  const [accountInfo, setAccountInfo] = useState<AccountFormData>({
+    account_type: "EA",
+    account_email: "",
+    account_password: "",
+    account_name: "",
+  });
   const [appliedPromo, setAppliedPromo] = useState<{
     code: string;
     discount: number;
@@ -138,12 +145,16 @@ export default function CartPage() {
     setIsProviderDrawerOpen(true);
   };
 
-  const handleMethodSelect = async (method: "card" | "sbp") => {
+  const handleMethodSelect = async (
+    method: "card" | "sbp",
+    accountData: AccountFormData
+  ) => {
     try {
       const payment = await createPayment({
         payment_method: method,
         bonus_to_use: bonusToUse,
         promo_code: appliedPromo?.code,
+        account_info: accountData,
       }).unwrap();
 
       // Открываем страницу оплаты во внешнем браузере (не в Mini App)
@@ -251,6 +262,8 @@ export default function CartPage() {
         onClose={() => setIsProviderDrawerOpen(false)}
         onSelectMethod={handleMethodSelect}
         isLoading={paymentLoading}
+        accountInfo={accountInfo}
+        onAccountInfoChange={setAccountInfo}
       />
     </div>
   );

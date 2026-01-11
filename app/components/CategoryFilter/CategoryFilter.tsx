@@ -2,7 +2,6 @@
 
 import { useGetCategoriesQuery } from '@/app/store/api/categoriesApi'
 import { cn } from '@/lib/utils'
-import { useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 
 interface CategoryFilterProps {
@@ -15,48 +14,6 @@ export default function CategoryFilter({
 	onCategoryChange,
 }: CategoryFilterProps) {
 	const { data: categories, isLoading } = useGetCategoriesQuery()
-	const scrollContainerRef = useRef<HTMLDivElement>(null)
-	const [isDragging, setIsDragging] = useState(false)
-	const [startX, setStartX] = useState(0)
-	const [scrollLeft, setScrollLeft] = useState(0)
-
-	// Обработчики для свайпа
-	const handleMouseDown = (e: React.MouseEvent) => {
-		if (!scrollContainerRef.current) return
-		setIsDragging(true)
-		setStartX(e.pageX - scrollContainerRef.current.offsetLeft)
-		setScrollLeft(scrollContainerRef.current.scrollLeft)
-	}
-
-	const handleTouchStart = (e: React.TouchEvent) => {
-		if (!scrollContainerRef.current) return
-		setIsDragging(true)
-		setStartX(e.touches[0].pageX - scrollContainerRef.current.offsetLeft)
-		setScrollLeft(scrollContainerRef.current.scrollLeft)
-	}
-
-	const handleMouseMove = (e: React.MouseEvent) => {
-		if (!isDragging || !scrollContainerRef.current) return
-		e.preventDefault()
-		const x = e.pageX - scrollContainerRef.current.offsetLeft
-		const walk = (x - startX) * 2
-		scrollContainerRef.current.scrollLeft = scrollLeft - walk
-	}
-
-	const handleTouchMove = (e: React.TouchEvent) => {
-		if (!isDragging || !scrollContainerRef.current) return
-		const x = e.touches[0].pageX - scrollContainerRef.current.offsetLeft
-		const walk = (x - startX) * 2
-		scrollContainerRef.current.scrollLeft = scrollLeft - walk
-	}
-
-	const handleMouseUp = () => {
-		setIsDragging(false)
-	}
-
-	const handleTouchEnd = () => {
-		setIsDragging(false)
-	}
 
 	if (isLoading) {
 		return (
@@ -77,21 +34,7 @@ export default function CategoryFilter({
 
 	return (
 		<div className='relative'>
-			<div
-				ref={scrollContainerRef}
-				onMouseDown={handleMouseDown}
-				onMouseMove={handleMouseMove}
-				onMouseUp={handleMouseUp}
-				onMouseLeave={handleMouseUp}
-				onTouchStart={handleTouchStart}
-				onTouchMove={handleTouchMove}
-				onTouchEnd={handleTouchEnd}
-				className='flex gap-2 overflow-x-auto py-2 scrollbar-hide cursor-grab active:cursor-grabbing'
-				style={{
-					scrollbarWidth: 'none',
-					msOverflowStyle: 'none',
-				}}
-			>
+			<div className='flex gap-2 overflow-x-scroll py-2 scrollbar-hide'>
 				<Button
 					onClick={() => onCategoryChange(null)}
 					variant={selectedCategoryId === null ? 'default' : 'secondary'}
@@ -105,7 +48,6 @@ export default function CategoryFilter({
 					Все
 				</Button>
 
-				{/* Категории */}
 				{categories.map((category) => (
 					<Button
 						key={category.id}

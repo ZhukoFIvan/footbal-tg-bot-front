@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react'
 import {
-	useGetProductReviewsQuery,
-	useGetProductRatingQuery,
+	useGetShopReviewsQuery,
+	useGetShopRatingQuery,
 	useCreateReviewMutation,
 	useUpdateReviewMutation,
 	useDeleteReviewMutation,
@@ -14,13 +14,7 @@ import { ReviewItem } from './ReviewItem'
 import { ReviewForm } from './ReviewForm'
 import Loader from '../Loader/Loader'
 
-interface ProductReviewsProps {
-	productId: number
-}
-
-export const ProductReviews: React.FC<ProductReviewsProps> = ({
-	productId,
-}) => {
+export const ProductReviews: React.FC = () => {
 	const [showForm, setShowForm] = useState(false)
 	const [editingReview, setEditingReview] = useState<Review | null>(null)
 
@@ -30,14 +24,14 @@ export const ProductReviews: React.FC<ProductReviewsProps> = ({
 		isLoading: reviewsLoading,
 		error: reviewsError,
 		refetch: refetchReviews,
-	} = useGetProductReviewsQuery({ productId })
+	} = useGetShopReviewsQuery()
 
 	const {
 		data: rating,
 		isLoading: ratingLoading,
 		error: ratingError,
 		refetch: refetchRating,
-	} = useGetProductRatingQuery(productId)
+	} = useGetShopRatingQuery()
 
 	// Mutations
 	const [createReview, { isLoading: isCreating }] = useCreateReviewMutation()
@@ -53,10 +47,7 @@ export const ProductReviews: React.FC<ProductReviewsProps> = ({
 				}).unwrap()
 				setEditingReview(null)
 			} else {
-				await createReview({
-					product_id: productId,
-					...data,
-				}).unwrap()
+				await createReview(data).unwrap()
 			}
 			setShowForm(false)
 
@@ -91,7 +82,7 @@ export const ProductReviews: React.FC<ProductReviewsProps> = ({
 		}
 
 		try {
-			await deleteReview({ reviewId, productId }).unwrap()
+			await deleteReview(reviewId).unwrap()
 
 			// Принудительно обновляем данные с задержкой
 			setTimeout(() => {
@@ -174,7 +165,6 @@ export const ProductReviews: React.FC<ProductReviewsProps> = ({
 			{showForm && (
 				<div className='p-4 bg-element-bg border border-foreground/20 rounded-lg'>
 					<ReviewForm
-						productId={productId}
 						editingReview={editingReview}
 						onSubmit={handleSubmit}
 						onCancel={handleCancelForm}
@@ -218,7 +208,7 @@ export const ProductReviews: React.FC<ProductReviewsProps> = ({
 						</svg>
 						<p className='text-lg font-medium mb-1'>Пока нет отзывов</p>
 						<p className='text-sm'>
-							Будьте первым, кто оставит отзыв о этом товаре!
+							Будьте первым, кто оставит отзыв о нашем магазине!
 						</p>
 					</div>
 				)

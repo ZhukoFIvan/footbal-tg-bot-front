@@ -11,8 +11,28 @@ import { useGetSectionsQuery } from './store'
 import { useGetCategoriesQuery } from './store/api/categoriesApi'
 import { useGetMainScreenCategoriesQuery } from './store/api/categoriesApi'
 import Loader from './components/Loader/Loader'
+import { useEffect } from 'react'
 
 export default function Home() {
+	useEffect(() => {
+		if (typeof window.Telegram === 'undefined') return
+		const tg = window.Telegram.WebApp as any
+		if (!tg) return
+		tg.ready()
+		tg.expand()
+
+		// Отключаем вертикальные свайпы для закрытия приложения
+		if (typeof tg.setSwipeBehavior === 'function') {
+			tg.setSwipeBehavior({ allow_vertical_swipe: false })
+		}
+
+		tg.onEvent('viewportChanged', () => {
+			if (!tg.isExpanded) {
+				tg.expand()
+			}
+		})
+	}, [])
+
 	const isAdmin = useAppSelector(selectIsAdmin)
 
 	// Получаем все данные сразу (без кеширования)

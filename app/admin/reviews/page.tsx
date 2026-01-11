@@ -17,7 +17,6 @@ import {
 	Trash2,
 	Star,
 	User,
-	Package,
 	Clock,
 	AlertCircle,
 } from 'lucide-react'
@@ -180,19 +179,6 @@ export default function AdminReviewsPage() {
 								{/* Header */}
 								<div className='flex items-start justify-between gap-4'>
 									<div className='flex-1 space-y-2'>
-										{/* Product */}
-										<div className='flex items-center gap-2 text-sm'>
-											<Package className='w-4 h-4 text-foreground/50' />
-											<button
-												onClick={() =>
-													router.push(`/catalog/${review.product.slug}`)
-												}
-												className='text-foreground hover:text-primary transition-colors'
-											>
-												{review.product.title}
-											</button>
-										</div>
-
 										{/* User */}
 										<div className='flex items-center gap-2 text-sm text-foreground/70'>
 											<User className='w-4 h-4 text-foreground/50' />

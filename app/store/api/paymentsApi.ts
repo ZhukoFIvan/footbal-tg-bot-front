@@ -1,9 +1,17 @@
 import { baseApi } from "./baseApi";
 
+export interface AccountInfo {
+  account_type: "EA" | "Facebook" | "Google";
+  account_email: string;
+  account_password?: string;
+  account_name: string;
+}
+
 export interface CreatePaymentRequest {
   payment_method: "card" | "sbp"; // Провайдер выбирается автоматически: card → FreeKassa, sbp → Paypalych
   promo_code?: string;
   bonus_to_use?: number;
+  account_info: AccountInfo;
 }
 
 export interface PaymentResponse {
