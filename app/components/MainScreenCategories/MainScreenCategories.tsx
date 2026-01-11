@@ -52,7 +52,7 @@ export default function MainScreenCategories() {
 						</div>
 
 						{limitedProducts.length > 0 ? (
-							<div className='flex justify-around px-4 pb-2 '>
+							<div className='flex gap-4 px-4 pb-2 '>
 								{limitedProducts.map((product) => (
 									<div key={product.id} className='flex-shrink-0 w-[170px]'>
 										<ProductCard product={product} />
