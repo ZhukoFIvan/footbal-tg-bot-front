@@ -11,6 +11,8 @@ import { Plus, Edit, Trash2, MoreVertical } from 'lucide-react'
 import Loader from '@/app/components/Loader/Loader'
 import Image from 'next/image'
 import AdminHeader from '@/app/components/admin/shared/AdminHeader'
+import { useAppSelector } from '@/app/store'
+import { selectIsAuthenticated } from '@/app/store/slices/authSlice'
 
 const rub = (n: number) => new Intl.NumberFormat('ru-RU').format(n) + ' ₽'
 
@@ -44,10 +46,14 @@ const getFirstImage = (images: string[] | string | null): string | null => {
 
 export default function AdminProductsPage() {
 	const router = useRouter()
-	const { data: products, isLoading } = useGetAdminProductsQuery({
-		limit: 100,
-		offset: 0,
-	})
+	const isAuthenticated = useAppSelector(selectIsAuthenticated)
+	const { data: products, isLoading } = useGetAdminProductsQuery(
+		{
+			limit: 100,
+			offset: 0,
+		},
+		{ skip: !isAuthenticated }
+	)
 	const [deleteProduct, { isLoading: deleting }] = useDeleteProductMutation()
 	const [activeMenu, setActiveMenu] = useState<number | null>(null)
 	const menuRef = useRef<HTMLDivElement>(null)

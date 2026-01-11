@@ -837,36 +837,6 @@ export default function AdminStatsPage() {
 											</th>
 										</tr>
 									</thead>
-									<tbody>
-										{recentOrders.map((order) => (
-											<tr
-												key={order.id}
-												className='border-b border-white/5 hover:bg-background/50 transition-colors'
-											>
-												<td className='py-3 px-4 text-foreground'>
-													#{order.id}
-												</td>
-												<td className='py-3 px-4 text-foreground'>
-													User #{order.user_id}
-												</td>
-												<td className='py-3 px-4'>
-													<span
-														className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-															order.status
-														)}`}
-													>
-														{getStatusText(order.status)}
-													</span>
-												</td>
-												<td className='py-3 px-4 text-foreground font-semibold'>
-													{formatMoney(order.amount)}
-												</td>
-												<td className='py-3 px-4 text-foreground/60 text-sm'>
-													{formatDate(order.created_at)}
-												</td>
-											</tr>
-										))}
-									</tbody>
 								</table>
 							</div>
 						) : (

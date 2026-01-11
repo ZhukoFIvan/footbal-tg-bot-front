@@ -49,7 +49,7 @@ export function AccountInfoForm({
 				Данные игрового аккаунта
 			</h3>
 			<p className='text-sm text-foreground/60 mb-4'>
-				Укажите данные аккаунта для получения игрового ключа
+				Укажите данные аккаунта для получения доната
 			</p>
 
 			{/* Account Type Select */}

@@ -29,6 +29,8 @@ export default function MainScreenCategories() {
 					return 0
 				})
 
+				const limitedProducts = sortedProducts.slice(0, 2)
+
 				return (
 					<div key={category.id}>
 						<div className='flex items-center justify-between mb-4 px-4'>
@@ -49,10 +51,10 @@ export default function MainScreenCategories() {
 							</button>
 						</div>
 
-						{sortedProducts.length > 0 ? (
-							<div className='flex gap-3 px-4 pb-2 overflow-x-scroll scrollbar-hide'>
-								{sortedProducts.map((product) => (
-									<div key={product.id} className='flex-shrink-0 w-[160px]'>
+						{limitedProducts.length > 0 ? (
+							<div className='flex justify-between px-4 pb-2 '>
+								{limitedProducts.map((product) => (
+									<div key={product.id} className='flex-shrink-0 w-[170px]'>
 										<ProductCard product={product} />
 									</div>
 								))}
