@@ -1,15 +1,24 @@
 "use client";
 
 import { Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Check, ArrowLeft } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 function PaymentSuccessContent() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get("order_id");
+
+  const openBot = () => {
+    // Используем Telegram WebApp API для открытия бота
+    if (window.Telegram && window.Telegram.WebApp) {
+      // Открываем бота через Telegram
+      window.Telegram.WebApp.openTelegramLink("https://t.me/testttoviiiybot");
+    } else {
+      // Fallback: открываем в новом окне
+      window.open("https://t.me/testttoviiiybot", "_blank");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
@@ -34,29 +43,24 @@ function PaymentSuccessContent() {
         </p>
 
         {orderId && (
-          <p className="text-foreground/50 text-sm mb-8">
+          <p className="text-foreground/50 text-sm mb-4">
             Номер заказа: #{orderId}
           </p>
         )}
 
+        {/* Instruction */}
+        <p className="text-foreground/60 text-sm mb-8">
+          Вернитесь в мини ап после оплаты
+        </p>
+
         {/* Buttons */}
         <div className="space-y-3">
           <Button
-            onClick={() => router.push("/catalog")}
+            onClick={openBot}
             className="w-full h-14 rounded-full bg-primary hover:bg-primary-hover text-white text-lg font-semibold shadow-[0_0_20px_rgba(33,188,96,0.3)]"
           >
-            Вернуться в каталог
+            Перейти в бота
           </Button>
-
-          <Link href="/cart">
-            <Button
-              variant="outline"
-              className="w-full h-14 rounded-full border-white/10 hover:bg-element-bg"
-            >
-              <ArrowLeft className="w-5 h-5 mr-2" />
-              Вернуться в корзину
-            </Button>
-          </Link>
         </div>
       </div>
     </div>
