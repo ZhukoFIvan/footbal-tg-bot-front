@@ -33,7 +33,7 @@ export default function MainScreenCategories() {
 
 				return (
 					<div key={category.id}>
-						<div className='flex items-center justify-between mb-4 px-4'>
+						<div className='flex items-center justify-between gap-3 mb-4 px-4'>
 							<div className='flex items-center gap-2'>
 								<h2 className='text-2xl font-bold text-foreground'>
 									{category.title}
@@ -52,7 +52,7 @@ export default function MainScreenCategories() {
 						</div>
 
 						{limitedProducts.length > 0 ? (
-							<div className='flex justify-between px-4 pb-2 '>
+							<div className='flex justify-around px-4 pb-2 '>
 								{limitedProducts.map((product) => (
 									<div key={product.id} className='flex-shrink-0 w-[170px]'>
 										<ProductCard product={product} />
