@@ -9,14 +9,23 @@ function PaymentSuccessContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("order_id");
 
+  // Получаем username бота из query параметра или переменной окружения
+  const botUsernameFromQuery = searchParams.get("bot_username");
+  const botUsernameFromEnv = process.env.NEXT_PUBLIC_BOT_USERNAME;
+  const botUsername =
+    botUsernameFromQuery || botUsernameFromEnv || "noonyashop_bot";
+
   const openBot = () => {
+    // Формируем ссылку на бота с параметром start для открытия диалога
+    const botLink = `https://t.me/${botUsername}?start`;
+
     // Используем Telegram WebApp API для открытия бота
     if (window.Telegram && window.Telegram.WebApp) {
       // Открываем бота через Telegram
-      window.Telegram.WebApp.openTelegramLink("https://t.me/testttoviiiybot");
+      window.Telegram.WebApp.openTelegramLink(botLink);
     } else {
       // Fallback: открываем в новом окне
-      window.open("https://t.me/testttoviiiybot", "_blank");
+      window.open(botLink, "_blank");
     }
   };
 
