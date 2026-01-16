@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Smartphone, X } from "lucide-react";
+import { Smartphone, X, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   AccountInfoForm,
@@ -132,6 +132,38 @@ export function PaymentProviderDrawer({
 
           {/* Payment Methods - Только способ оплаты */}
           <div className="space-y-4">
+            {/* Card - автоматически выберет FreeKassa */}
+            <button
+              onClick={() => handleMethodSelect("card")}
+              disabled={isLoading}
+              className={`w-full p-4 rounded-2xl border-2 transition-all disabled:opacity-50 ${
+                selectedMethod === "card"
+                  ? "border-primary bg-primary/10"
+                  : "border-white/10 bg-background hover:border-white/20"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
+                    <CreditCard className="w-6 h-6 text-primary" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-semibold text-foreground">
+                      Картой
+                    </div>
+                    <div className="text-sm text-foreground/60">
+                      Банковская карта
+                    </div>
+                  </div>
+                </div>
+                {selectedMethod === "card" && (
+                  <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                    <div className="w-2 h-2 rounded-full bg-white" />
+                  </div>
+                )}
+              </div>
+            </button>
+
             {/* SBP - автоматически выберет Paypalych */}
             <button
               onClick={() => handleMethodSelect("sbp")}
@@ -149,7 +181,7 @@ export function PaymentProviderDrawer({
                   </div>
                   <div className="text-left">
                     <div className="font-semibold text-foreground">
-                      СБП / QR-код
+                      СБП
                     </div>
                     <div className="text-sm text-foreground/60">
                       Оплата через банк

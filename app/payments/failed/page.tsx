@@ -9,15 +9,17 @@ function PaymentFailedContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("order_id");
   const error = searchParams.get("error");
+  const botUsername = searchParams.get("bot_username") || "noonyashop_bot";
 
   const openBot = () => {
+    const botUrl = `https://t.me/${botUsername}`;
     // Используем Telegram WebApp API для открытия бота
     if (window.Telegram && window.Telegram.WebApp) {
       // Открываем бота через Telegram
-      window.Telegram.WebApp.openTelegramLink("https://t.me/testttoviiiybot");
+      window.Telegram.WebApp.openTelegramLink(botUrl);
     } else {
       // Fallback: открываем в новом окне
-      window.open("https://t.me/testttoviiiybot", "_blank");
+      window.open(botUrl, "_blank");
     }
   };
 
