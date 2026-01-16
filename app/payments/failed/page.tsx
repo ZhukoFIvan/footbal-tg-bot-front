@@ -13,18 +13,27 @@ function PaymentFailedContent() {
   const botUsernameFromEnv = process.env.NEXT_PUBLIC_BOT_USERNAME;
   const botUsername = botUsernameFromQuery || botUsernameFromEnv;
   
-  // Если bot_username не передан, не открываем бота
-  if (!botUsername) {
-    console.error("bot_username не передан в URL параметрах");
-  }
+  // Логируем для отладки
+  console.log("Payment Failed Page - Debug:", {
+    botUsernameFromQuery,
+    botUsernameFromEnv,
+    botUsername,
+    allParams: Object.fromEntries(searchParams.entries())
+  });
 
   const openBot = () => {
     if (!botUsername) {
       console.error("Не удалось открыть бота: bot_username не указан");
+      alert("Ошибка: bot_username не указан. Пожалуйста, вернитесь в бота вручную.");
       return;
     }
     
-    const botUrl = `https://t.me/${botUsername}`;
+    // Убираем @ если есть
+    const cleanBotUsername = botUsername.replace(/^@/, "");
+    const botUrl = `https://t.me/${cleanBotUsername}`;
+    
+    console.log("Opening bot:", botUrl);
+    
     // Используем Telegram WebApp API для открытия бота
     if (window.Telegram && window.Telegram.WebApp) {
       // Открываем бота через Telegram
@@ -72,8 +81,7 @@ function PaymentFailedContent() {
         <div className="space-y-3">
           <Button
             onClick={openBot}
-            disabled={!botUsername}
-            className="w-full h-14 rounded-full bg-primary hover:bg-primary-hover text-white text-lg font-semibold shadow-[0_0_20px_rgba(33,188,96,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full h-14 rounded-full bg-primary hover:bg-primary-hover text-white text-lg font-semibold shadow-[0_0_20px_rgba(33,188,96,0.3)]"
           >
             Перейти в бота
           </Button>
