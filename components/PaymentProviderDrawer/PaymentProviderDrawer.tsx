@@ -133,7 +133,8 @@ export function PaymentProviderDrawer({
           {/* Payment Methods - Только способ оплаты */}
           <div className="space-y-4">
             {/* Card - автоматически выберет FreeKassa */}
-            <button
+            {/* Временно отключено */}
+            {/* <button
               onClick={() => handleMethodSelect("card")}
               disabled={isLoading}
               className={`w-full p-4 rounded-2xl border-2 transition-all disabled:opacity-50 ${
@@ -162,7 +163,7 @@ export function PaymentProviderDrawer({
                   </div>
                 )}
               </div>
-            </button>
+            </button> */}
 
             {/* SBP - автоматически выберет Paypalych */}
             <button
