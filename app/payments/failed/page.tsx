@@ -9,9 +9,21 @@ function PaymentFailedContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("order_id");
   const error = searchParams.get("error");
-  const botUsername = searchParams.get("bot_username") || "noonyashop_bot";
+  const botUsernameFromQuery = searchParams.get("bot_username");
+  const botUsernameFromEnv = process.env.NEXT_PUBLIC_BOT_USERNAME;
+  const botUsername = botUsernameFromQuery || botUsernameFromEnv;
+  
+  // Если bot_username не передан, не открываем бота
+  if (!botUsername) {
+    console.error("bot_username не передан в URL параметрах");
+  }
 
   const openBot = () => {
+    if (!botUsername) {
+      console.error("Не удалось открыть бота: bot_username не указан");
+      return;
+    }
+    
     const botUrl = `https://t.me/${botUsername}`;
     // Используем Telegram WebApp API для открытия бота
     if (window.Telegram && window.Telegram.WebApp) {

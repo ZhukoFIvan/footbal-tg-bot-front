@@ -12,10 +12,19 @@ function PaymentSuccessContent() {
   // Получаем username бота из query параметра или переменной окружения
   const botUsernameFromQuery = searchParams.get("bot_username");
   const botUsernameFromEnv = process.env.NEXT_PUBLIC_BOT_USERNAME;
-  const botUsername =
-    botUsernameFromQuery || botUsernameFromEnv || "noonyashop_bot";
+  const botUsername = botUsernameFromQuery || botUsernameFromEnv;
+  
+  // Если bot_username не передан, не открываем бота
+  if (!botUsername) {
+    console.error("bot_username не передан в URL параметрах");
+  }
 
   const openBot = () => {
+    if (!botUsername) {
+      console.error("Не удалось открыть бота: bot_username не указан");
+      return;
+    }
+    
     // Формируем ссылку на бота с параметром start для открытия диалога
     const botLink = `https://t.me/${botUsername}?start`;
 
