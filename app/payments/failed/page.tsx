@@ -72,7 +72,8 @@ function PaymentFailedContent() {
         <div className="space-y-3">
           <Button
             onClick={openBot}
-            className="w-full h-14 rounded-full bg-primary hover:bg-primary-hover text-white text-lg font-semibold shadow-[0_0_20px_rgba(33,188,96,0.3)]"
+            disabled={!botUsername}
+            className="w-full h-14 rounded-full bg-primary hover:bg-primary-hover text-white text-lg font-semibold shadow-[0_0_20px_rgba(33,188,96,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Перейти в бота
           </Button>
