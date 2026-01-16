@@ -11,28 +11,24 @@ function PaymentFailedContent() {
   const error = searchParams.get("error");
   const botUsernameFromQuery = searchParams.get("bot_username");
   const botUsernameFromEnv = process.env.NEXT_PUBLIC_BOT_USERNAME;
-  const botUsername = botUsernameFromQuery || botUsernameFromEnv;
+  // Fallback: если bot_username не передан, используем дефолтное значение
+  const botUsername = botUsernameFromQuery || botUsernameFromEnv || "Romix_store_bot";
   
   // Логируем для отладки
   console.log("Payment Failed Page - Debug:", {
     botUsernameFromQuery,
     botUsernameFromEnv,
     botUsername,
-    allParams: Object.fromEntries(searchParams.entries())
+    allParams: Object.fromEntries(searchParams.entries()),
+    currentUrl: typeof window !== "undefined" ? window.location.href : "N/A"
   });
 
   const openBot = () => {
-    if (!botUsername) {
-      console.error("Не удалось открыть бота: bot_username не указан");
-      alert("Ошибка: bot_username не указан. Пожалуйста, вернитесь в бота вручную.");
-      return;
-    }
-    
     // Убираем @ если есть
     const cleanBotUsername = botUsername.replace(/^@/, "");
     const botUrl = `https://t.me/${cleanBotUsername}`;
     
-    console.log("Opening bot:", botUrl);
+    console.log("Opening bot:", botUrl, "from botUsername:", botUsername);
     
     // Используем Telegram WebApp API для открытия бота
     if (window.Telegram && window.Telegram.WebApp) {

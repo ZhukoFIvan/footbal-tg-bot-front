@@ -12,7 +12,8 @@ function PaymentSuccessContent() {
   // Получаем username бота из query параметра или переменной окружения
   const botUsernameFromQuery = searchParams.get("bot_username");
   const botUsernameFromEnv = process.env.NEXT_PUBLIC_BOT_USERNAME;
-  const botUsername = botUsernameFromQuery || botUsernameFromEnv;
+  // Fallback: если bot_username не передан, используем дефолтное значение
+  const botUsername = botUsernameFromQuery || botUsernameFromEnv || "Romix_store_bot";
   
   // Логируем для отладки
   console.log("Payment Success Page - Debug:", {
@@ -23,18 +24,12 @@ function PaymentSuccessContent() {
   });
 
   const openBot = () => {
-    if (!botUsername) {
-      console.error("Не удалось открыть бота: bot_username не указан");
-      alert("Ошибка: bot_username не указан. Пожалуйста, вернитесь в бота вручную.");
-      return;
-    }
-    
     // Убираем @ если есть
     const cleanBotUsername = botUsername.replace(/^@/, "");
     // Формируем ссылку на бота с параметром start для открытия диалога
     const botLink = `https://t.me/${cleanBotUsername}?start`;
 
-    console.log("Opening bot:", botLink);
+    console.log("Opening bot:", botLink, "from botUsername:", botUsername);
 
     // Используем Telegram WebApp API для открытия бота
     if (window.Telegram && window.Telegram.WebApp) {
